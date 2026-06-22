@@ -1941,21 +1941,14 @@
   function fitViewport() {
     const designW = 1920;
     const designH = 1080;
-    const scaleW = window.innerWidth / designW;
-    const scaleH = window.innerHeight / designH;
-    let scale;
-    let offsetX;
-    let offsetY;
-    if (scaleW <= scaleH) {
-      scale = scaleW;
-      offsetX = 0;
-      offsetY = (window.innerHeight - designH * scale) / 2;
-    } else {
-      scale = scaleH;
-      offsetX = (window.innerWidth - designW * scale) / 2;
-      offsetY = 0;
-    }
+    const vw = document.documentElement.clientWidth || window.innerWidth;
+    const vh = document.documentElement.clientHeight || window.innerHeight;
+    const scale = vw / designW;
+    const scaledH = designH * scale;
+    const offsetX = 0;
+    const offsetY = scaledH <= vh ? (vh - scaledH) / 2 : 0;
     const app = document.getElementById('app');
+    app.style.transformOrigin = 'top left';
     app.style.transform = `translate(${offsetX}px, ${offsetY}px) scale(${scale})`;
     document.documentElement.style.setProperty('--app-scale', String(scale));
   }

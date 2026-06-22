@@ -1,13 +1,13 @@
 (function () {
   'use strict';
 
-  const LANES = ['业务需求', '需求承接', '产品拆解', '业务审核', '已完成'];
+  const LANES = ['业务需求', '需求待承接', '产品拆解', '业务审核中', '已完成'];
   const POOL_LANE_META = {
-    业务需求: { subtitle: '业务提出' },
-    需求承接: { subtitle: '产品端' },
-    产品拆解: { subtitle: '拆分规划' },
-    业务审核: { subtitle: '方案验收' },
-    已完成: { subtitle: '运转结束' }
+    业务需求: { subtitle: '' },
+    需求待承接: { subtitle: '' },
+    产品拆解: { subtitle: '' },
+    业务审核中: { subtitle: '' },
+    已完成: { subtitle: '' }
   };
   const PRODUCT_SESSION_ID = 'chat-product-1';
   const LOGO_URL = 'assets/logo.png';
@@ -52,7 +52,7 @@
     { name: '文档校验', text: '完整性检查', done: false }
   ];
 
-  const PROGRESS_STAGES = ['业务需求撰写', '需求承接', '产品拆解', '审核产品文档', '完成'];
+  const PROGRESS_STAGES = ['业务需求撰写', '需求待承接', '产品拆解', '审核产品文档', '完成'];
   const LOG_ROWS = Array.from({ length: 8 }, () => ({ time: '2026-10-10 12:23', content: '派发亲情账户储蓄罐充值需求产品需求', actor: '王大陆' }));
 
   const state = {
@@ -74,7 +74,13 @@
     assetFrameworkOpen: false,
     assetPage: 1,
     assetPageSize: 15,
-    assetMatrixView: 'matrix',
+    matrixExpandedDomain: null,
+    assetDomainKey: null,
+    assetTopicId: null,
+    assetDetailKeyword: '',
+    assetDetailId: null,
+    assetDetailTab: 'detail',
+    lineageKeyword: '',
     homePrompt: '我想做一个个人养老金开户流程改造，需要开户协议落库、账户选择和结果凭证。',
     draft: '',
     mentionOpen: false,
@@ -214,13 +220,13 @@
   }
 
   function laneClass(lane) {
-    return { 业务需求: 'lane-blue', 需求承接: 'lane-sky', 产品拆解: 'lane-indigo', 业务审核: 'lane-amber', 已完成: 'lane-emerald' }[lane];
+    return { 业务需求: 'lane-blue', 需求待承接: 'lane-amber', 产品拆解: 'lane-sky', 业务审核中: 'lane-indigo', 已完成: 'lane-emerald' }[lane];
   }
 
   function partLaneClass(lane) {
-    if (lane === '需求承接') return 'col-2';
+    if (lane === '需求待承接' || lane === '需求承接') return 'col-2';
     if (lane === '产品拆解' || lane === '需求拆解') return 'col-3';
-    if (lane === '业务审核' || lane === '需求审核') return 'col-4';
+    if (lane === '业务审核中' || lane === '业务审核' || lane === '需求审核') return 'col-4';
     if (lane === '已完成') return 'col-5';
     return 'col-2';
   }
@@ -231,7 +237,7 @@
 
   function partTimeLabel(part) {
     const req = activeRequirement();
-    const prefix = part.lane === '需求承接' ? '派发时间' : (part.lane === '产品拆解' || part.lane === '需求拆解') ? '承接时间' : (part.lane === '业务审核' || part.lane === '需求审核') ? '提交时间' : '完成时间';
+    const prefix = (part.lane === '需求待承接' || part.lane === '需求承接') ? '派发时间' : (part.lane === '产品拆解' || part.lane === '需求拆解') ? '承接时间' : (part.lane === '业务审核中' || part.lane === '业务审核' || part.lane === '需求审核') ? '提交时间' : '完成时间';
     const stamp = part.time?.includes('-') ? part.time : `${req.createTime.slice(0, 10)} ${part.time || '10:00'}`;
     return `${prefix}：${stamp}`;
   }
@@ -334,74 +340,81 @@
     return part?.lane || '业务需求';
   }
 
-  function poolBoardCards(lane) {
+  function poolBusinessCards() {
     const keyword = state.poolKeyword.trim();
-    const mineNames = state.currentRole === 'business' ? ['王建国', '王大陆', '刘业务'] : ['房产品', '陈产品', '吴产品', '周开发', '李一飞', '王产品'];
-    return state.poolBoard.filter((card) => {
-      if (card.lane !== lane) return false;
-      if (state.poolFilter === 'mine' && !mineNames.includes(card.person)) return false;
-      const haystack = `${card.title}${card.person}${card.relation || ''}${card.id}`;
+    const mineNames = state.currentRole === 'business' ? ['夏彤', '王建国', '王大陆', '刘业务'] : ['房产品', '陈产品', '吴产品', '周开发', '李一飞', '王产品'];
+    return state.poolBoard.business.filter((card) => {
+      if (state.poolFilter === 'mine' && !mineNames.includes(card.creator)) return false;
+      const haystack = `${card.title}${card.creator}${card.children.map((c) => c.title).join('')}`;
       return !keyword || haystack.includes(keyword);
     });
   }
 
-  function renderPoolCard(card, horizontal) {
-    const bizGroup = card.relation || card.title;
-    const tone = card.relation ? hatTone(card.relation) : '';
-    let relationHtml = '';
-    let wrapClass = 'pool-card-wrap';
-    if (card.relation) {
-      if (horizontal) {
-        relationHtml = `<div class="card-side-tag hat-${tone}"><span>关联</span><em title="${esc(card.relation)}">${esc(card.relation)}</em></div>`;
-        wrapClass += ' has-side-tag horizontal-card';
-      } else {
-        relationHtml = `<div class="card-hat hat-${tone}">${icon('tag', 14)}<span title="${esc(card.relation)}">关联: ${esc(card.relation)}</span></div>`;
-        wrapClass += ' has-hat';
-      }
-    }
-    return `<button class="${wrapClass}" data-action="open-requirement" data-id="${esc(card.requirementId)}" data-biz-group="${esc(bizGroup)}">
-      ${relationHtml}
+  function poolTaskCards(lane) {
+    const keyword = state.poolKeyword.trim();
+    const mineNames = state.currentRole === 'business' ? ['王建国', '王大陆', '刘业务', '王大路'] : ['房产品', '陈产品', '吴产品', '周开发', '李一飞', '王产品', '王大路'];
+    return state.poolBoard.tasks.filter((card) => {
+      if (card.lane !== lane) return false;
+      if (state.poolFilter === 'mine' && card.person && !mineNames.includes(card.person)) return false;
+      const haystack = `${card.title}${card.relation || ''}${card.id}${card.person || ''}`;
+      return !keyword || haystack.includes(keyword);
+    });
+  }
+
+  function poolLaneCount(lane) {
+    return lane === '业务需求' ? poolBusinessCards().length : poolTaskCards(lane).length;
+  }
+
+  function renderBusinessPoolCard(card) {
+    const returnedBadge = card.status === '已退回' ? '<span class="returned-badge">已退回</span>' : '';
+    return `<button class="pool-card-wrap pool-biz-card" data-action="open-requirement" data-id="${esc(card.requirementId)}" data-biz-group="${esc(card.title)}">
       <div class="card-inner-box">
-        <div class="pool-card-top">
-          <span>#${esc(card.id)}</span>
-          ${poolStatusPill(card.status)}
-        </div>
+        ${returnedBadge}
         <h3>${esc(card.title)}</h3>
-        <div class="pool-card-footer">
-          <span class="domain-tag domain-${card.domainTone || 'blue'}">${esc(card.domain || '')}</span>
-          <div class="person-time">
-            <span>${poolPersonIcon(card)}${esc(card.personLabel)}: ${esc(card.person)}</span>
-            <span>${icon('calendar', 14)}${esc(card.time)}</span>
-          </div>
-        </div>
+        <div class="pool-biz-meta">${esc(card.creator)} 创建于 ${esc(card.createTime)}</div>
+        <div class="pool-biz-children">${card.children.map((child) => `
+          <div class="workbench-child">
+            <span class="biz-tag ${child.tagClass}">${esc(child.tag)}</span>
+            <em>${esc(child.label)}</em>
+            <strong>${esc(child.title)}</strong>
+          </div>`).join('')}</div>
       </div>
     </button>`;
   }
 
-  function renderPoolLaneHead(lane, count, horizontal, expanded) {
-    const meta = POOL_LANE_META[lane];
+  function renderTaskPoolCard(card, horizontal) {
+    const footerHtml = card.person && card.timeLabel
+      ? `<div class="pool-task-footer"><span class="pool-task-id">#${esc(card.id)}</span><span>${esc(card.person)} ${esc(card.timeLabel)}</span></div>`
+      : `<div class="pool-task-id">#${esc(card.id)}</div>`;
+    return `<button class="pool-card-wrap pool-task-card${horizontal ? ' horizontal-card' : ''}" data-action="open-requirement" data-id="${esc(card.requirementId)}" data-biz-group="${esc(card.relation)}">
+      <div class="card-inner-box">
+        <div class="pool-task-head">
+          <h3>${esc(card.title)}</h3>
+          <span class="domain-tag domain-${card.domainTone || 'blue'}">${esc(card.domain || '')}</span>
+        </div>
+        <p class="pool-task-relation">关联业务需求：${esc(card.relation)}</p>
+        ${footerHtml}
+      </div>
+    </button>`;
+  }
+
+  function renderPoolLaneHead(lane, count, horizontal) {
     if (horizontal) {
+      const meta = POOL_LANE_META[lane];
       return `<div class="pool-lane-rail ${laneClass(lane)}">
         <i></i>
         <div class="pool-lane-rail-text">
           <strong>${esc(lane)}</strong>
-          <span>${esc(meta.subtitle)}</span>
+          ${meta.subtitle ? `<span>${esc(meta.subtitle)}</span>` : ''}
         </div>
         <b>${count}</b>
       </div>`;
     }
-    return `<header class="pool-lane-head-v2">
+    return `<header class="pool-lane-head-v2 pool-lane-head-simple">
       <div class="pool-lane-title">
-        <i></i>
-        <div>
-          <strong>${esc(lane)}</strong>
-          <span>${esc(meta.subtitle)}</span>
-        </div>
+        <strong>${esc(lane)}</strong>
         <b>${count}</b>
       </div>
-      <button class="pool-lane-expand ${expanded ? 'active' : ''}" data-action="expand-lane" data-lane="${esc(lane)}" title="${expanded ? '收起' : '展开'}">
-        <span class="expand-glyph ${expanded ? 'active' : ''}" aria-hidden="true"></span>
-      </button>
     </header>`;
   }
 
@@ -476,6 +489,47 @@
     </section>`;
   }
 
+  function domainKey(l0Id, domain) {
+    return `${l0Id}:${domain}`;
+  }
+
+  function getDomainDetail(l0Id, domain) {
+    const key = domainKey(l0Id, domain);
+    if (seedDomainDetails[key]) return seedDomainDetails[key];
+    return {
+      domain,
+      l0Id,
+      valueStream: '默认价值流(未归档)',
+      topics: [
+        { id: `${l0Id}-1`, name: '公共主题', desc: '暂无业务描述', functions: [] },
+        { id: `${l0Id}-2`, name: '核心业务流程', desc: '暂无业务描述', functions: [] },
+        { id: `${l0Id}-3`, name: '支撑能力主题', desc: '暂无业务描述', functions: [] }
+      ]
+    };
+  }
+
+  function activeDomainDetail() {
+    if (!state.assetDomainKey) return null;
+    const [l0Id, ...rest] = state.assetDomainKey.split(':');
+    return getDomainDetail(l0Id, rest.join(':'));
+  }
+
+  function activeDomainTopic() {
+    const detail = activeDomainDetail();
+    if (!detail) return null;
+    return detail.topics.find((topic) => topic.id === state.assetTopicId) || detail.topics[0];
+  }
+
+  function filteredTopicFunctions(topic) {
+    const keyword = state.assetDetailKeyword.trim().toLowerCase();
+    if (!keyword) return topic.functions || [];
+    return (topic.functions || []).filter((item) => (
+      item.id.toLowerCase().includes(keyword)
+      || item.name.toLowerCase().includes(keyword)
+      || (item.desc || '').toLowerCase().includes(keyword)
+    ));
+  }
+
   function renderAssetStatIcon(item, compact = false) {
     const cls = compact ? 'asset-tab-icon' : 'asset-stat-icon';
     if (item.glyph === 'biz') {
@@ -501,6 +555,328 @@
 
   function assetMineOwners() {
     return state.currentRole === 'business' ? ['王大陆', '王建国', '陈静'] : ['房产品', '陈产品', '李一飞'];
+  }
+
+  const lineageState = {
+    expandedIds: new Set(),
+    transform: { x: 80, y: 60, scale: 0.72 },
+    isDragging: false,
+    dragStart: { x: 0, y: 0 },
+    filteredRoot: seedLineageRoot
+  };
+
+  const LINEAGE_NODE_CLASS = {
+    '根节点': 'lineage-node-root',
+    '价值链': 'lineage-node-vc',
+    '领域': 'lineage-node-domain',
+    '主题活动': 'lineage-node-activity',
+    '业务功能': 'lineage-node-func'
+  };
+
+  function activeAssetItem() {
+    return seedAssetResults.find((item) => item.id === state.assetDetailId) || null;
+  }
+
+  function assetDetailMeta(item) {
+    return seedAssetDetailMeta[item?.id] || {
+      domain: '未归档领域',
+      valueStream: '默认价值流',
+      version: 'v1.0.0',
+      createTime: '2025-01-01',
+      updateTime: '2026-01-01',
+      status: '已发布',
+      completeness: '待补充',
+      department: '—'
+    };
+  }
+
+  function assetDetailTags(item) {
+    if (seedAssetTags[item?.id]) return seedAssetTags[item.id];
+    return [
+      { category: '业务标签', name: item?.tag || '通用', tone: 'blue' },
+      { category: '技术标签', name: item?.framework || '未标注', tone: 'green' }
+    ];
+  }
+
+  function assetTypeLabel(type) {
+    return assetStats.find((s) => s.id === type)?.label || '资产';
+  }
+
+  function lineageGetAllParentIds(node, ids = new Set()) {
+    if (node.children && node.children.length > 0) {
+      ids.add(node.id);
+      node.children.forEach((child) => lineageGetAllParentIds(child, ids));
+    }
+    return ids;
+  }
+
+  function lineageFilterTree(node, query) {
+    if (!query) return node;
+    const lowerQuery = query.toLowerCase();
+    if (node.label.toLowerCase().includes(lowerQuery)) return node;
+    if (node.children) {
+      const filteredChildren = node.children.map((child) => lineageFilterTree(child, query)).filter(Boolean);
+      if (filteredChildren.length > 0) return { ...node, children: filteredChildren };
+    }
+    return null;
+  }
+
+  function lineageInitExpanded() {
+    lineageState.expandedIds = new Set([seedLineageRoot.id]);
+    seedLineageRoot.children.forEach((vc) => {
+      lineageState.expandedIds.add(vc.id);
+      if (vc.children) vc.children.forEach((domain) => lineageState.expandedIds.add(domain.id));
+    });
+  }
+
+  function lineageRenderNodeCard(node, isExpanded, isMatch) {
+    const typeClass = LINEAGE_NODE_CLASS[node.type] || LINEAGE_NODE_CLASS['业务功能'];
+    const hasChildren = node.children && node.children.length > 0;
+    const highlightClass = node.highlight ? ' lineage-node-current' : (isMatch ? ' lineage-node-match' : '');
+    let statusHtml = '';
+    if (node.status !== 'normal' && node.type === '业务功能') {
+      const statusClass = node.status === 'offline' ? 'offline' : 'warning';
+      statusHtml = `<span class="lineage-node-status ${statusClass}"></span>`;
+    }
+    let toggleHtml = '';
+    if (hasChildren) {
+      const badgeHtml = !isExpanded ? `<span class="lineage-child-count">${node.children.length}</span>` : '';
+      toggleHtml = `
+        <button class="lineage-node-toggle" data-action="lineage-toggle" data-id="${esc(node.id)}" type="button">
+          ${badgeHtml}
+          <span class="lineage-toggle-btn">${isExpanded ? '−' : '+'}</span>
+        </button>`;
+    }
+    return `
+      <div class="lineage-node-card ${typeClass}${highlightClass}">
+        ${statusHtml}
+        <div class="lineage-node-icon">${esc(node.type.slice(0, 1))}</div>
+        <div class="lineage-node-text">
+          <div class="lineage-node-type">${esc(node.type)}</div>
+          <div class="lineage-node-label" title="${esc(node.label)}">${esc(node.label)}</div>
+        </div>
+        ${toggleHtml}
+      </div>`;
+  }
+
+  function lineageRenderMindMapNode(node) {
+    const isExpanded = lineageState.expandedIds.has(node.id);
+    const hasChildren = node.children && node.children.length > 0;
+    const keyword = state.lineageKeyword.trim();
+    const isMatch = keyword && node.label.toLowerCase().includes(keyword.toLowerCase());
+    let html = `<div class="lineage-branch"><div class="lineage-node-wrap">${lineageRenderNodeCard(node, isExpanded, isMatch)}</div>`;
+    if (hasChildren && isExpanded) {
+      html += `<div class="lineage-children"><div class="lineage-connector-h"></div><div class="lineage-children-col">`;
+      node.children.forEach((child, index) => {
+        const isFirst = index === 0;
+        const isLast = index === node.children.length - 1;
+        const isSingle = node.children.length === 1;
+        let lineClass = 'mid';
+        if (isFirst && !isLast) lineClass = 'first';
+        if (isLast && !isFirst) lineClass = 'last';
+        html += `
+          <div class="lineage-child-row">
+            <div class="lineage-connector-v ${isSingle ? 'single' : lineClass}">
+              <div class="lineage-connector-h-inner"></div>
+            </div>
+            <div class="lineage-child-node">${lineageRenderMindMapNode(child)}</div>
+          </div>`;
+      });
+      html += `</div></div>`;
+    }
+    html += `</div>`;
+    return html;
+  }
+
+  function lineageUpdateTransform() {
+    const content = document.getElementById('lineage-canvas-content');
+    const container = document.getElementById('lineage-canvas');
+    const zoomDisplay = document.getElementById('lineage-zoom-level');
+    if (!content || !container) return;
+    const { x, y, scale } = lineageState.transform;
+    content.style.transform = `translate(${x}px, ${y}px) scale(${scale})`;
+    container.style.backgroundSize = `${20 * scale}px ${20 * scale}px`;
+    container.style.backgroundPosition = `${x}px ${y}px`;
+    if (zoomDisplay) zoomDisplay.textContent = `${Math.round(scale * 100)}%`;
+  }
+
+  function lineageRenderTree() {
+    const container = document.getElementById('lineage-canvas-content');
+    if (!container) return;
+    const keyword = state.lineageKeyword.trim();
+    const root = keyword
+      ? (lineageFilterTree(seedLineageRoot, keyword) || { ...seedLineageRoot, children: [] })
+      : seedLineageRoot;
+    lineageState.filteredRoot = root;
+    if (root.children && root.children.length === 0 && keyword) {
+      container.innerHTML = `<div class="lineage-empty">未找到包含 "${esc(keyword)}" 的资产节点</div>`;
+    } else {
+      container.innerHTML = lineageRenderMindMapNode(root);
+    }
+    lineageUpdateTransform();
+  }
+
+  function bindLineageCanvasEvents() {
+    const app = document.getElementById('app');
+    if (app.dataset.lineageBound === '1') return;
+    app.dataset.lineageBound = '1';
+
+    app.addEventListener('mousedown', (e) => {
+      const canvas = e.target.closest('#lineage-canvas');
+      if (!canvas || e.target.closest('.lineage-node-toggle')) return;
+      lineageState.isDragging = true;
+      canvas.classList.add('dragging');
+      lineageState.dragStart = { x: e.clientX - lineageState.transform.x, y: e.clientY - lineageState.transform.y };
+    });
+
+    window.addEventListener('mousemove', (e) => {
+      if (!lineageState.isDragging) return;
+      lineageState.transform.x = e.clientX - lineageState.dragStart.x;
+      lineageState.transform.y = e.clientY - lineageState.dragStart.y;
+      lineageUpdateTransform();
+    });
+
+    window.addEventListener('mouseup', () => {
+      if (!lineageState.isDragging) return;
+      lineageState.isDragging = false;
+      const canvas = document.getElementById('lineage-canvas');
+      if (canvas) canvas.classList.remove('dragging');
+    });
+
+    app.addEventListener('wheel', (e) => {
+      const canvas = e.target.closest('#lineage-canvas');
+      if (!canvas) return;
+      e.preventDefault();
+      const scaleChange = e.deltaY > 0 ? 0.9 : 1.1;
+      lineageState.transform.scale = Math.max(0.2, Math.min(lineageState.transform.scale * scaleChange, 2));
+      lineageUpdateTransform();
+    }, { passive: false });
+  }
+
+  function renderAssetDetailInfo(item) {
+    const meta = assetDetailMeta(item);
+    const stat = assetStats.find((s) => s.id === item.type) || assetStats[0];
+    const rows = [
+      ['资产名称', item.name],
+      ['资产编码', item.code],
+      ['资产类型', assetTypeLabel(item.type)],
+      ['负责人', item.owner],
+      ['所属部门', meta.department],
+      ['业务领域', meta.domain],
+      ['价值流', meta.valueStream],
+      ['框架类型', item.framework],
+      ['版本号', meta.version],
+      ['发布状态', meta.status],
+      ['规范完备度', meta.completeness],
+      ['创建时间', meta.createTime],
+      ['最近更新', meta.updateTime]
+    ];
+    return `<div class="asset-detail-info-panel">
+      <header class="asset-detail-info-head">
+        <span class="asset-result-icon">${renderAssetStatIcon(stat, true)}</span>
+        <div>
+          <h2>${esc(item.name)}</h2>
+          <code>${esc(item.code)}</code>
+        </div>
+      </header>
+      <p class="asset-detail-desc">${esc(item.desc)}</p>
+      <div class="asset-detail-info-grid">
+        ${rows.map(([label, value]) => `
+          <div class="asset-detail-info-item">
+            <span>${esc(label)}</span>
+            <strong>${esc(value)}</strong>
+          </div>`).join('')}
+      </div>
+    </div>`;
+  }
+
+  function renderAssetDetailTags(item) {
+    const tags = assetDetailTags(item);
+    const grouped = tags.reduce((acc, tag) => {
+      if (!acc[tag.category]) acc[tag.category] = [];
+      acc[tag.category].push(tag);
+      return acc;
+    }, {});
+    return `<div class="asset-detail-tags-panel">
+      <header class="asset-detail-tags-head">
+        <strong>资产标签</strong>
+        <span>共 ${tags.length} 个标签</span>
+      </header>
+      ${Object.entries(grouped).map(([category, list]) => `
+        <section class="asset-detail-tag-group">
+          <h3>${esc(category)}</h3>
+          <div class="asset-detail-tag-list">
+            ${list.map((tag) => `<span class="asset-detail-tag tone-${tag.tone}">${esc(tag.name)}</span>`).join('')}
+          </div>
+        </section>`).join('')}
+      <table class="asset-detail-tag-table">
+        <thead><tr><th>标签分类</th><th>标签名称</th><th>来源</th></tr></thead>
+        <tbody>
+          ${tags.map((tag) => `<tr><td>${esc(tag.category)}</td><td><span class="asset-detail-tag tone-${tag.tone}">${esc(tag.name)}</span></td><td>资产库自动标注</td></tr>`).join('')}
+        </tbody>
+      </table>
+    </div>`;
+  }
+
+  function renderAssetDetailLineage() {
+    return `<div class="asset-detail-lineage-panel">
+      <div class="lineage-toolbar">
+        <div class="lineage-toolbar-left">
+          <span class="lineage-toolbar-title">${icon('assetMatrix', 16)}资产血缘脑图</span>
+          <div class="lineage-search">${icon('search', 14)}<input data-field="lineageKeyword" value="${esc(state.lineageKeyword)}" placeholder="搜索节点名称..."/></div>
+        </div>
+        <div class="lineage-toolbar-right">
+          <button class="lineage-tool-btn" data-action="lineage-expand-all" type="button">全部展开</button>
+          <button class="lineage-tool-btn" data-action="lineage-collapse-all" type="button">仅看核心</button>
+          <div class="lineage-zoom-group">
+            <button class="lineage-tool-btn icon" data-action="lineage-zoom-in" type="button" title="放大">+</button>
+            <span id="lineage-zoom-level">72%</span>
+            <button class="lineage-tool-btn icon" data-action="lineage-zoom-out" type="button" title="缩小">−</button>
+            <button class="lineage-tool-btn icon" data-action="lineage-center" type="button" title="居中">${icon('home', 14)}</button>
+          </div>
+        </div>
+      </div>
+      <div id="lineage-canvas" class="lineage-canvas">
+        <div id="lineage-canvas-content" class="lineage-canvas-content"></div>
+      </div>
+    </div>`;
+  }
+
+  function renderAssetDetail() {
+    const item = activeAssetItem();
+    if (!item) return renderAssetResults();
+    const stat = assetStats.find((s) => s.id === item.type) || assetStats[0];
+    const tabs = [
+      { id: 'detail', label: '详细信息' },
+      { id: 'tags', label: '标签信息' },
+      { id: 'lineage', label: '血缘信息' }
+    ];
+    let tabContent = '';
+    if (state.assetDetailTab === 'tags') tabContent = renderAssetDetailTags(item);
+    else if (state.assetDetailTab === 'lineage') tabContent = renderAssetDetailLineage();
+    else tabContent = renderAssetDetailInfo(item);
+
+    return `<section class="asset-detail-view">
+      <header class="asset-detail-head">
+        <button class="asset-back-btn" data-action="back-asset-results">${icon('caret', 14, 'back-icon')}返回列表</button>
+        <div class="asset-detail-head-main">
+          <span class="asset-result-icon">${renderAssetStatIcon(stat, true)}</span>
+          <div>
+            <h1>${esc(item.name)}</h1>
+            <div class="asset-detail-head-meta">
+              <code>${esc(item.code)}</code>
+              <span class="asset-result-tag">${esc(item.tag)}</span>
+              <span class="asset-detail-owner">${esc(item.owner)}</span>
+            </div>
+          </div>
+        </div>
+        <div class="asset-detail-tabs">
+          ${tabs.map((tab) => `
+            <button class="asset-detail-tab ${state.assetDetailTab === tab.id ? 'active' : ''}" data-action="set-asset-detail-tab" data-tab="${tab.id}">${esc(tab.label)}</button>`).join('')}
+        </div>
+      </header>
+      <div class="asset-detail-body ${state.assetDetailTab === 'lineage' ? 'lineage-mode' : ''}">${tabContent}</div>
+    </section>`;
   }
 
   function filteredAssetResults() {
@@ -556,7 +932,7 @@
   }
 
   function renderAssetResultCard(item) {
-    return `<article class="asset-result-card">
+    return `<article class="asset-result-card" data-action="open-asset-detail" data-id="${esc(item.id)}">
       <div class="asset-result-card-head">
         <span class="asset-result-icon">${renderAssetStatIcon(assetStats.find((s) => s.id === item.type) || assetStats[0], true)}</span>
         <div class="asset-result-titles">
@@ -665,11 +1041,36 @@
     </section>`;
   }
 
+  function renderDomainExpandPanel(detail) {
+    const valueStreamChip = `<span class="domain-matrix-topic domain-matrix-topic-stream">${esc(detail.valueStream)}</span>`;
+    const topicChips = detail.topics.map((topic) => `
+      <button class="domain-matrix-topic" data-action="open-domain-topic" data-id="${esc(detail.l0Id)}" data-domain="${esc(detail.domain)}" data-topic="${esc(topic.id)}">${esc(topic.name)}</button>`).join('');
+    return `<div class="domain-matrix-expand">
+      <header class="domain-matrix-expand-head">${esc(detail.domain)} · L2价值流 / L2.5业务主题</header>
+      <div class="domain-matrix-expand-grid">${valueStreamChip}${topicChips}</div>
+    </div>`;
+  }
+
   function renderDomainMatrixRow(row) {
-    return `<div class="domain-matrix-row">
+    const chips = row.domains.map((domain) => {
+      const key = domainKey(row.id, domain);
+      const expanded = state.matrixExpandedDomain === key;
+      return `<button class="domain-matrix-chip ${expanded ? 'active' : ''}" data-action="toggle-domain" data-id="${esc(row.id)}" data-domain="${esc(domain)}" title="${esc(domain)}">${esc(domain)}</button>`;
+    }).join('');
+
+    const expandedKey = state.matrixExpandedDomain;
+    const expandedInRow = expandedKey && expandedKey.startsWith(`${row.id}:`);
+    let expandPanel = '';
+    if (expandedInRow) {
+      const domainName = expandedKey.slice(row.id.length + 1);
+      expandPanel = renderDomainExpandPanel(getDomainDetail(row.id, domainName));
+    }
+
+    return `<div class="domain-matrix-row ${expandedInRow ? 'expanded' : ''}">
       <div class="domain-matrix-l0"><span>${esc(row.label)}</span></div>
-      <div class="domain-matrix-l1-grid">
-        ${row.domains.map((domain) => `<button class="domain-matrix-chip" data-action="open-domain" data-id="${esc(row.id)}" data-domain="${esc(domain)}" title="${esc(domain)}">${esc(domain)}</button>`).join('')}
+      <div class="domain-matrix-l1-area">
+        <div class="domain-matrix-l1-grid">${chips}</div>
+        ${expandPanel}
       </div>
     </div>`;
   }
@@ -686,40 +1087,93 @@
     </div>`;
   }
 
-  function renderDomainMatrixCards() {
-    return `<div class="domain-card-view">
-      ${seedDomainMatrix.map((row) => `
-        <article class="domain-card-group">
-          <header class="domain-card-group-head">
-            <strong>${esc(row.label)}</strong>
-            <span>${row.domains.length} 个业务领域</span>
-          </header>
-          <div class="domain-card-group-grid">
-            ${row.domains.map((domain) => `<button class="domain-card-item" data-action="open-domain" data-id="${esc(row.id)}" data-domain="${esc(domain)}">${esc(domain)}</button>`).join('')}
+  function renderAssetDomainDetail() {
+    const detail = activeDomainDetail();
+    const topic = activeDomainTopic();
+    if (!detail || !topic) return renderAssetMatrix();
+
+    const functions = filteredTopicFunctions(topic);
+    const functionRows = functions.length
+      ? functions.map((item) => `
+        <tr>
+          <td><code>${esc(item.id)}</code></td>
+          <td><strong>${esc(item.name)}</strong><p>${esc(item.desc || '暂无描述')}</p></td>
+          <td><span class="domain-detail-complete ${item.complete ? 'done' : 'pending'}">${item.complete ? '已完备' : '待补充'}</span></td>
+          <td><button class="outline" data-action="asset-topic-entry" data-id="${esc(item.id)}">查看详情</button></td>
+        </tr>`).join('')
+      : '<tr class="domain-detail-empty-row"><td colspan="4">此主题下没有匹配的业务功能。</td></tr>';
+
+    const treeItems = detail.topics.map((item) => `
+      <button class="domain-detail-tree-item ${item.id === topic.id ? 'active' : ''}" data-action="select-domain-topic" data-topic="${esc(item.id)}">
+        <span>${esc(item.name)}</span>
+        ${item.functions?.length ? `<em>${item.functions.length}</em>` : ''}
+      </button>`).join('');
+
+    return `<section class="asset-view asset-domain-detail-view">
+      <header class="domain-detail-head">
+        <nav class="domain-detail-breadcrumb">
+          <button class="domain-detail-crumb home" data-action="back-asset-matrix" title="返回矩阵">${icon('home', 16)}</button>
+          <span class="domain-detail-crumb">${esc(detail.domain)} <em>(业务领域)</em></span>
+          <span class="domain-detail-sep">›</span>
+          <span class="domain-detail-crumb">${esc(detail.valueStream)} <em>(价值流)</em></span>
+          <span class="domain-detail-sep">›</span>
+          <span class="domain-detail-crumb current">${esc(topic.name)} <em>(业务主题)</em></span>
+        </nav>
+        <div class="domain-detail-search">${icon('search', 16)}<input data-field="assetDetailKeyword" value="${esc(state.assetDetailKeyword)}" placeholder="模糊搜索当前视图资产..."/></div>
+      </header>
+      <div class="domain-detail-body">
+        <aside class="domain-detail-sidebar">
+          <div class="domain-detail-sidebar-head">
+            <strong>${esc(detail.domain)}</strong>
+            <span>BUSINESS INDEX TREE</span>
           </div>
-        </article>`).join('')}
-    </div>`;
+          <div class="domain-detail-tree">
+            <div class="domain-detail-tree-group">
+              <div class="domain-detail-tree-stream">${esc(detail.valueStream)}</div>
+              ${treeItems}
+            </div>
+          </div>
+        </aside>
+        <div class="domain-detail-main">
+          <header class="domain-detail-main-head">
+            <div class="domain-detail-level">L2.5 业务主题 <span>ID: ${esc(topic.id)}</span></div>
+            <h2>${esc(topic.name)}</h2>
+            <p>${esc(topic.desc || '暂无业务描述')}</p>
+          </header>
+          <section class="domain-detail-table-panel">
+            <header class="domain-detail-table-head">
+              <strong>下辖 L3 业务功能清单</strong>
+              <span>${functions.length.toLocaleString('zh-CN')} 项资产</span>
+            </header>
+            <div class="domain-detail-table-wrap">
+              <table class="domain-detail-table">
+                <thead>
+                  <tr>
+                    <th>功能 ID</th>
+                    <th>业务功能名称 &amp; 描述</th>
+                    <th>规范完备度</th>
+                    <th>操作入口</th>
+                  </tr>
+                </thead>
+                <tbody>${functionRows}</tbody>
+              </table>
+            </div>
+          </section>
+        </div>
+      </div>
+    </section>`;
   }
 
   function renderAssetMatrix() {
-    const isMatrix = state.assetMatrixView === 'matrix';
     return `<section class="asset-view asset-matrix-view">
       <header class="domain-matrix-head">
         <div class="domain-matrix-head-text">
           <h2>全行级业务领域矩阵 <em>(L0价值链 → L1业务领域)</em></h2>
           <p>点击领域卡片可查看 L2 价值流 / L2.5 业务主题；点击业务主题进入左树右表明细。</p>
         </div>
-        <div class="domain-matrix-head-tools">
-          <button class="domain-matrix-tool-btn" data-action="matrix-download">${icon('download', 16)}下载模板</button>
-          <button class="domain-matrix-tool-btn" data-action="matrix-upload">${icon('upload', 16)}上传</button>
-          <div class="domain-matrix-view-toggle">
-            <button class="${isMatrix ? 'active' : ''}" data-action="set-matrix-view" data-view="matrix">全景矩阵</button>
-            <button class="${!isMatrix ? 'active' : ''}" data-action="set-matrix-view" data-view="card">卡片视角</button>
-          </div>
-        </div>
       </header>
       <div class="domain-matrix-scroll">
-        ${isMatrix ? renderDomainMatrixPanorama() : renderDomainMatrixCards()}
+        ${renderDomainMatrixPanorama()}
       </div>
     </section>`;
   }
@@ -728,30 +1182,24 @@
     const horizontal = state.poolView === 'horizontal';
     const kanbanClass = horizontal ? 'pool-kanban pool-kanban-horizontal kanban-scroll' : 'pool-kanban pool-kanban-vertical kanban-scroll';
     const laneMarkup = LANES.map((lane) => {
-      const cards = poolBoardCards(lane);
-      const isExpanded = state.expandedPoolLane === lane;
-      const isCollapsed = !horizontal && state.expandedPoolLane && state.expandedPoolLane !== lane;
-
-      if (isCollapsed) {
-        return `<button class="pool-lane pool-lane-slim ${laneClass(lane)}" data-action="expand-lane" data-lane="${esc(lane)}">
-          <i></i>
-          <span>${esc(lane)}</span>
-          <b>${cards.length}</b>
-        </button>`;
-      }
-
-      const laneClassName = `${laneClass(lane)} ${horizontal ? 'pool-lane-row' : 'pool-lane-col'}${isExpanded ? ' lane-expanded' : ''}`;
-      const listClass = `pool-card-list${horizontal ? ' horizontal' : ''}${isExpanded ? ' expanded-grid' : ''}`;
+      const count = poolLaneCount(lane);
+      const isBusiness = lane === '业务需求';
+      const cards = isBusiness ? poolBusinessCards() : poolTaskCards(lane);
+      const laneClassName = `${laneClass(lane)} ${horizontal ? 'pool-lane-row' : 'pool-lane-col'}`;
+      const listClass = `pool-card-list${horizontal ? ' horizontal' : ''}`;
+      const cardHtml = isBusiness
+        ? cards.map((c) => renderBusinessPoolCard(c)).join('')
+        : cards.map((c) => renderTaskPoolCard(c, horizontal)).join('');
 
       if (horizontal) {
         return `<section class="pool-lane ${laneClassName}">
-          ${renderPoolLaneHead(lane, cards.length, true, false)}
-          <div class="${listClass}">${cards.map((c) => renderPoolCard(c, true)).join('')}</div>
+          ${renderPoolLaneHead(lane, count, true)}
+          <div class="${listClass}">${cardHtml}</div>
         </section>`;
       }
       return `<section class="pool-lane ${laneClassName}">
-        ${renderPoolLaneHead(lane, cards.length, false, isExpanded)}
-        <div class="${listClass}">${cards.map((c) => renderPoolCard(c, false)).join('')}</div>
+        ${renderPoolLaneHead(lane, count, false)}
+        <div class="${listClass}">${cardHtml}</div>
       </section>`;
     }).join('');
 
@@ -981,6 +1429,8 @@
     if (state.page === 'home') return renderHome();
     if (state.page === 'pool') return renderPool();
     if (state.page === 'asset-search') return renderAssetSearch();
+    if (state.page === 'asset-detail') return renderAssetDetail();
+    if (state.page === 'asset-domain-detail') return renderAssetDomainDetail();
     if (state.page === 'asset-matrix') return renderAssetMatrix();
     return renderWorkspace();
   }
@@ -996,8 +1446,8 @@
         <nav class="rail-nav">
           <button class="rail-icon ${state.page === 'home' ? 'active' : ''}" data-action="nav" data-page="home" title="首页">${icon('home')}</button>
           <button class="rail-icon ${state.page === 'pool' ? 'active' : ''}" data-action="nav" data-page="pool" title="工作台">${icon('workbench')}</button>
-          <button class="rail-icon ${state.page === 'asset-search' ? 'active' : ''}" data-action="nav" data-page="asset-search" title="资产检索">${icon('assetSearch')}</button>
-          <button class="rail-icon ${state.page === 'asset-matrix' ? 'active' : ''}" data-action="nav" data-page="asset-matrix" title="资产矩阵">${icon('assetMatrix')}</button>
+          <button class="rail-icon ${['asset-search', 'asset-detail'].includes(state.page) ? 'active' : ''}" data-action="nav" data-page="asset-search" title="资产检索">${icon('assetSearch')}</button>
+          <button class="rail-icon ${['asset-matrix', 'asset-domain-detail'].includes(state.page) ? 'active' : ''}" data-action="nav" data-page="asset-matrix" title="资产矩阵">${icon('assetMatrix')}</button>
           <button class="rail-icon ${state.page === 'workspace' ? 'active' : ''}" data-action="open-conversation" data-id="${esc(state.activeConversationId)}" title="会话">${icon('chat')}</button>
         </nav>
         ${renderRailSessions()}
@@ -1017,6 +1467,9 @@
     const newMessages = root.querySelector('.messages');
     if (newMessages) newMessages.scrollTop = msgScrollTop;
     bindPoolCardHover(root);
+    if (state.page === 'asset-detail' && state.assetDetailTab === 'lineage') {
+      lineageRenderTree();
+    }
   }
 
   function bindPoolCardHover(root) {
@@ -1024,11 +1477,9 @@
       const group = card.dataset.bizGroup;
       card.addEventListener('mouseenter', () => {
         root.querySelectorAll(`.pool-card-wrap[data-biz-group="${CSS.escape(group)}"] .card-inner-box`).forEach((box) => box.classList.add('highlighted'));
-        root.querySelectorAll(`.pool-card-wrap[data-biz-group="${CSS.escape(group)}"] .card-hat, .pool-card-wrap[data-biz-group="${CSS.escape(group)}"] .card-side-tag`).forEach((el) => el.classList.add('highlighted'));
       });
       card.addEventListener('mouseleave', () => {
         root.querySelectorAll(`.pool-card-wrap[data-biz-group="${CSS.escape(group)}"] .card-inner-box`).forEach((box) => box.classList.remove('highlighted'));
-        root.querySelectorAll(`.pool-card-wrap[data-biz-group="${CSS.escape(group)}"] .card-hat, .pool-card-wrap[data-biz-group="${CSS.escape(group)}"] .card-side-tag`).forEach((el) => el.classList.remove('highlighted'));
       });
     });
   }
@@ -1092,7 +1543,7 @@
       state.aiDispatchRecommended = false;
       state.dispatchCompleted = true;
       req.status = '待承接';
-      req.parts.forEach((part) => { part.status = '待承接'; part.lane = '需求承接'; });
+      req.parts.forEach((part) => { part.status = '待承接'; part.lane = '需求待承接'; });
       pushMessage({ id: Date.now() + 1, from: 'ai', html: '已派发给对应产品经理。' });
       state.logs.push({ title: 'AI 调用承接接口', time: '刚刚', text, artifact: '承接卡片' });
     } else {
@@ -1124,7 +1575,7 @@
     state.productSessionAvailable = false;
     state.dispatchCompleted = true;
     req.status = '待承接';
-    req.parts.forEach((part) => { part.status = '待承接'; part.lane = '需求承接'; });
+    req.parts.forEach((part) => { part.status = '待承接'; part.lane = '需求待承接'; });
     pushMessage({ id: Date.now(), from: 'ai', html: '已派发 2 条承接任务。' });
     state.logs.push({ title: 'AI 推荐派发', time: '刚刚', text: '业务经理同意 AI 推荐派发方案，系统生成陈产品、王产品的承接任务。', artifact: '承接卡片' });
     render();
@@ -1163,7 +1614,7 @@
   function submitReview() {
     const req = activeRequirement();
     const part = req.parts.find((p) => p.status === '拆解中') || req.parts[0];
-    part.lane = '业务审核';
+    part.lane = '业务审核中';
     part.status = '待业务审核';
     state.reviewPromptVisible = false;
     state.reviewStickyVisible = true;
@@ -1198,6 +1649,7 @@
       case 'nav':
         state.page = el.dataset.page;
         state.poolFilterOpen = false;
+        if (el.dataset.page !== 'asset-detail') state.assetDetailId = null;
         render();
         break;
       case 'open-conversation':
@@ -1349,13 +1801,78 @@
       case 'asset-knowledge':
       case 'asset-rd-flow':
         break;
-      case 'set-matrix-view':
-        state.assetMatrixView = el.dataset.view;
+      case 'open-asset-detail':
+        state.assetDetailId = el.dataset.id;
+        state.assetDetailTab = 'detail';
+        state.lineageKeyword = '';
+        state.page = 'asset-detail';
+        lineageInitExpanded();
         render();
         break;
-      case 'matrix-download':
-      case 'matrix-upload':
+      case 'back-asset-results':
+        state.page = 'asset-search';
+        state.assetShowResults = true;
+        state.assetDetailId = null;
+        render();
+        break;
+      case 'set-asset-detail-tab':
+        state.assetDetailTab = el.dataset.tab;
+        if (el.dataset.tab === 'lineage') {
+          lineageInitExpanded();
+          lineageState.transform = { x: 80, y: 60, scale: 0.72 };
+        }
+        render();
+        break;
+      case 'lineage-toggle': {
+        const nodeId = el.dataset.id;
+        if (lineageState.expandedIds.has(nodeId)) lineageState.expandedIds.delete(nodeId);
+        else lineageState.expandedIds.add(nodeId);
+        lineageRenderTree();
+        break;
+      }
+      case 'lineage-expand-all':
+        lineageState.expandedIds = lineageGetAllParentIds(seedLineageRoot);
+        lineageRenderTree();
+        break;
+      case 'lineage-collapse-all':
+        lineageState.expandedIds = new Set([seedLineageRoot.id]);
+        lineageRenderTree();
+        break;
+      case 'lineage-zoom-in':
+        lineageState.transform.scale = Math.min(lineageState.transform.scale * 1.2, 2);
+        lineageUpdateTransform();
+        break;
+      case 'lineage-zoom-out':
+        lineageState.transform.scale = Math.max(lineageState.transform.scale * 0.8, 0.2);
+        lineageUpdateTransform();
+        break;
+      case 'lineage-center':
+        lineageState.transform = { x: 80, y: 60, scale: 0.72 };
+        lineageUpdateTransform();
+        break;
       case 'open-domain':
+        break;
+      case 'toggle-domain': {
+        const key = domainKey(el.dataset.id, el.dataset.domain);
+        state.matrixExpandedDomain = state.matrixExpandedDomain === key ? null : key;
+        render();
+        break;
+      }
+      case 'open-domain-topic':
+        state.assetDomainKey = domainKey(el.dataset.id, el.dataset.domain);
+        state.assetTopicId = el.dataset.topic;
+        state.assetDetailKeyword = '';
+        state.page = 'asset-domain-detail';
+        render();
+        break;
+      case 'select-domain-topic':
+        state.assetTopicId = el.dataset.topic;
+        render();
+        break;
+      case 'back-asset-matrix':
+        state.page = 'asset-matrix';
+        state.assetDetailKeyword = '';
+        render();
         break;
       default:
         break;
@@ -1377,6 +1894,21 @@
       render();
     }
     if (field === 'assetKeyword') state.assetKeyword = event.target.value;
+    if (field === 'assetDetailKeyword') {
+      state.assetDetailKeyword = event.target.value;
+      render();
+    }
+    if (field === 'lineageKeyword') {
+      state.lineageKeyword = event.target.value;
+      if (state.lineageKeyword.trim()) {
+        lineageState.expandedIds = lineageGetAllParentIds(
+          lineageFilterTree(seedLineageRoot, state.lineageKeyword.trim()) || seedLineageRoot
+        );
+      } else {
+        lineageInitExpanded();
+      }
+      lineageRenderTree();
+    }
     if (field === 'draft') {
       state.draft = event.target.value;
       const nextMention = state.draft.includes('@');
@@ -1431,5 +1963,6 @@
   window.addEventListener('resize', fitViewport);
 
   fitViewport();
+  bindLineageCanvasEvents();
   render();
 })();

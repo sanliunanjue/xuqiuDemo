@@ -9,8 +9,8 @@ const seedRequirements = [
     flowTime: '2026-06-17 10:18',
     status: '待承接',
     parts: [
-      { id: 'PRD-A1', title: '开户协议落库', owner: '李一飞', time: '10:18', lane: '需求承接', status: '待承接' },
-      { id: 'PRD-A2', title: '账户选择与金额规则', owner: '王产品', time: '10:20', lane: '需求承接', status: '待承接' }
+      { id: 'PRD-A1', title: '开户协议落库', owner: '李一飞', time: '10:18', lane: '需求待承接', status: '待承接' },
+      { id: 'PRD-A2', title: '账户选择与金额规则', owner: '王产品', time: '10:20', lane: '需求待承接', status: '待承接' }
     ]
   },
   {
@@ -23,8 +23,8 @@ const seedRequirements = [
     flowTime: '2026-06-17 11:03',
     status: '待承接',
     parts: [
-      { id: 'PRD-B1', title: '亲情账户充值入口', owner: '王产品', time: '11:03', lane: '需求承接', status: '待承接' },
-      { id: 'PRD-B2', title: '交易结果通知', owner: '李产品', time: '11:05', lane: '需求承接', status: '待承接' }
+      { id: 'PRD-B1', title: '亲情账户充值入口', owner: '王产品', time: '11:03', lane: '需求待承接', status: '待承接' },
+      { id: 'PRD-B2', title: '交易结果通知', owner: '李产品', time: '11:05', lane: '需求待承接', status: '待承接' }
     ]
   },
   {
@@ -57,16 +57,79 @@ const seedRequirements = [
   }
 ];
 
-const seedPoolBoard = [
-  { id: 'b101', lane: '业务需求', type: 'business', status: '待提交', title: '全渠道智能客服平台接入升级', personLabel: '创建', person: '王建国', time: '06-15 10:30', domain: '核心链路', domainTone: 'blue', requirementId: 'BR-20260617-001' },
-  { id: 'b102', lane: '业务需求', type: 'business', status: '已退回', title: '手机银行亲情账户储蓄充值需求', personLabel: '创建', person: '王建国', time: '06-14 15:20', domain: '营销活动', domainTone: 'orange', requirementId: 'BR-20260617-002' },
-  { id: 'p102', lane: '业务需求', type: 'product', status: '已退回', title: '营销中心发券风控链路重构', personLabel: '创建', person: '王建国', time: '06-16 09:15', relation: '个人养老金开户流程改造', domain: '营销活动', domainTone: 'orange', requirementId: 'BR-20260617-001' },
-  { id: 'p201', lane: '需求承接', type: 'product', status: '待承接', title: '对公转账凭证回单下载支持', personLabel: '承接', person: '房产品', time: '06-14 10:00', relation: '个人养老金开户流程改造', domain: '基础架构', domainTone: 'purple', requirementId: 'BR-20260617-001' },
-  { id: 'p204', lane: '产品拆解', type: 'product', status: '分析中', title: '亲情账户储蓄充值需求说明书', personLabel: '承接', person: '陈产品', time: '06-13 16:20', relation: '个人养老金开户流程改造', domain: '核心链路', domainTone: 'blue', requirementId: 'BR-20260617-002' },
-  { id: 'p202', lane: '产品拆解', type: 'product', status: '分析中', title: '大额转账人脸风控拦截组件', personLabel: '承接', person: '吴产品', time: '06-14 15:45', relation: '个人养老金开户流程改造', domain: '基础架构', domainTone: 'purple', requirementId: 'BR-20260617-001' },
-  { id: 'p205', lane: '业务审核', type: 'product', status: '待审核', title: '开户协议落库及电子签章节点确认', personLabel: '提交', person: '刘业务', time: '06-14 09:00', relation: '个人养老金开户流程改造', domain: '核心链路', domainTone: 'blue', requirementId: 'BR-20260617-001' },
-  { id: 'p206', lane: '已完成', type: 'product', status: '已完成', title: '人脸活体检测鉴权组件接入', personLabel: '完成', person: '周开发', time: '06-13 18:30', relation: '个人养老金开户流程改造', domain: '用户增长', domainTone: 'green', requirementId: 'BR-20260616-004' }
-];
+const seedPoolBoard = {
+  business: [
+    {
+      id: 'biz-1',
+      requirementId: 'BR-20260617-001',
+      title: '个人养老金开户流程改造',
+      creator: '夏彤',
+      createTime: '2026-10-10 12:00',
+      status: null,
+      children: [
+        { tag: '客户体验', tagClass: 'blue', title: '亲情账户储蓄罐充值需求', label: '产品需求1' },
+        { tag: '用户增长', tagClass: 'orange', title: '开户协议落库', label: '产品需求2' },
+        { tag: '核心链路', tagClass: 'red', title: '人脸活体鉴权检测接入', label: '产品需求3' }
+      ]
+    },
+    {
+      id: 'biz-2',
+      requirementId: 'BR-20260617-002',
+      title: '个人结售汇产品升级业务需求',
+      creator: '夏彤',
+      createTime: '2026-10-10 12:00',
+      status: null,
+      children: [
+        { tag: '客户体验', tagClass: 'blue', title: '亲情账户储蓄罐充值需求', label: '产品需求1' },
+        { tag: '用户增长', tagClass: 'orange', title: '开户协议落库', label: '产品需求2' }
+      ]
+    },
+    {
+      id: 'biz-3',
+      requirementId: 'BR-20260615-006',
+      title: '个人结售汇产品升级业务需求',
+      creator: '夏彤',
+      createTime: '2026-10-10 12:00',
+      status: '已退回',
+      children: [
+        { tag: '客户体验', tagClass: 'blue', title: '亲情账户储蓄罐充值需求', label: '产品需求1' },
+        { tag: '用户增长', tagClass: 'orange', title: '开户协议落库', label: '产品需求2' }
+      ]
+    },
+    {
+      id: 'biz-4',
+      requirementId: 'BR-20260616-004',
+      title: '手机银行转账限额规则优化',
+      creator: '夏彤',
+      createTime: '2026-10-09 16:30',
+      status: null,
+      children: [
+        { tag: '核心链路', tagClass: 'red', title: '限额规则配置', label: '产品需求1' },
+        { tag: '客户体验', tagClass: 'blue', title: '灰度名单导入', label: '产品需求2' }
+      ]
+    },
+    {
+      id: 'biz-5',
+      requirementId: 'BR-20260614-003',
+      title: '全渠道智能客服平台接入升级',
+      creator: '夏彤',
+      createTime: '2026-10-08 11:00',
+      status: null,
+      children: [
+        { tag: '用户增长', tagClass: 'orange', title: '会话路由统一', label: '产品需求1' }
+      ]
+    }
+  ],
+  tasks: [
+    { id: 'B1001-001', lane: '需求待承接', title: '开户协议落库', domain: '客户体验', domainTone: 'blue', relation: '个人养老金开户流程改造', requirementId: 'BR-20260617-001', person: null, timeLabel: null },
+    { id: 'B1001-002', lane: '需求待承接', title: '亲情账户储蓄罐充值需求', domain: '用户增长', domainTone: 'orange', relation: '个人养老金开户流程改造', requirementId: 'BR-20260617-001', person: null, timeLabel: null },
+    { id: 'B1001-003', lane: '产品拆解', title: '人脸活体鉴权检测接入', domain: '客户体验', domainTone: 'blue', relation: '个人养老金开户流程改造', requirementId: 'BR-20260617-001', person: '王大路', timeLabel: '承接于 2026-10-10 12:00' },
+    { id: 'B1001-001', lane: '业务审核中', title: '人脸活体鉴权检测接入', domain: '客户体验', domainTone: 'blue', relation: '个人养老金开户流程改造', requirementId: 'BR-20260617-001', person: '王大路', timeLabel: '提交于 2026-10-10 12:00' },
+    { id: 'B1001-004', lane: '业务审核中', title: '开户协议落库', domain: '核心链路', domainTone: 'red', relation: '个人养老金开户流程改造', requirementId: 'BR-20260617-001', person: '王大路', timeLabel: '提交于 2026-10-10 12:00' },
+    { id: 'B1001-005', lane: '业务审核中', title: '账户选择与金额规则', domain: '客户体验', domainTone: 'blue', relation: '个人养老金开户流程改造', requirementId: 'BR-20260617-001', person: '王大路', timeLabel: '提交于 2026-10-10 12:00' },
+    { id: 'B1001-002', lane: '已完成', title: '亲情账户储蓄罐充值需求', domain: '用户增长', domainTone: 'orange', relation: '个人养老金开户流程改造', requirementId: 'BR-20260617-001', person: null, timeLabel: null }
+  ]
+};
 
 const seedConversations = [
   { id: 'chat-business-1', group: '业务需求', title: '个人养老金开户流程改造', tag: '客户体验', status: '待承接', lastOpen: '2026-09-09', activeRequirementId: 'BR-20260617-001' },
@@ -157,8 +220,139 @@ const seedDomainMatrix = [
   }
 ];
 
+const seedDomainDetails = {
+  'l0-channel:客服': {
+    domain: '客服',
+    l0Id: 'l0-channel',
+    valueStream: '默认价值流(未归档)',
+    topics: [
+      { id: 'CSVC_1', name: '客服坐席管理', desc: '暂无业务描述', functions: [] },
+      { id: 'CSVC_5', name: '公共主题', desc: '暂无业务描述', functions: [] },
+      { id: 'CSVC_2', name: '智能客服业务', desc: '暂无业务描述', functions: [] },
+      { id: 'CSVC_3', name: '客服外呼业务', desc: '暂无业务描述', functions: [] },
+      { id: 'CSVC_4', name: '客服质检管理', desc: '暂无业务描述', functions: [] },
+      { id: 'CSVC_6', name: '客服呼入业务', desc: '暂无业务描述', functions: [] },
+      { id: 'CSVC_7', name: '视频客服业务', desc: '暂无业务描述', functions: [] },
+      { id: 'CSVC_8', name: '话务管理', desc: '暂无业务描述', functions: [] },
+      { id: 'CSVC_9', name: '112', desc: '暂无业务描述', functions: [] },
+      { id: 'CSVC_10', name: '客服队列管理', desc: '暂无业务描述', functions: [] }
+    ]
+  }
+};
+
 const initialLogs = [
   { title: '业务需求提出', time: '2026-06-17 09:30', text: '王大陆提交个人养老金开户流程改造需求，AI 创建业务需求说明书。', artifact: '业务需求说明书' },
   { title: 'AI 推荐拆分', time: '2026-06-17 10:12', text: 'AI 建议拆分为开户协议落库、账户与金额规则、开户结果与凭证三个产品需求。', artifact: null },
   { title: '派发承接', time: '2026-06-17 10:18', text: '业务经理通过 @李一飞 派发开户协议落库任务。', artifact: '承接卡片' }
 ];
+
+const seedAssetDetailMeta = {
+  a1: { domain: '个人存款', valueStream: '开户与账户管理', version: 'v2.1.0', createTime: '2025-03-12', updateTime: '2026-05-08', status: '已发布', completeness: '已完备', department: '零售金融部门' },
+  a2: { domain: '个人存款', valueStream: '充值与转账', version: 'v1.4.2', createTime: '2025-06-18', updateTime: '2026-04-22', status: '已发布', completeness: '已完备', department: '零售金融部门' },
+  a9: { domain: '个人存款', valueStream: '开户与账户管理', version: 'v1.0.3', createTime: '2025-08-01', updateTime: '2026-03-15', status: '已发布', completeness: '已完备', department: '小微企业金融部门' }
+};
+
+const seedAssetTags = {
+  a1: [
+    { category: '业务标签', name: '个人金融', tone: 'blue' },
+    { category: '业务标签', name: '养老金', tone: 'blue' },
+    { category: '业务标签', name: '开户流程', tone: 'indigo' },
+    { category: '技术标签', name: 'Spring Boot', tone: 'green' },
+    { category: '技术标签', name: '微服务', tone: 'green' },
+    { category: '风险标签', name: '合规校验', tone: 'orange' },
+    { category: '数据标签', name: '协议落库', tone: 'purple' }
+  ],
+  a2: [
+    { category: '业务标签', name: '亲情账户', tone: 'blue' },
+    { category: '业务标签', name: '充值', tone: 'blue' },
+    { category: '技术标签', name: 'Dubbo', tone: 'green' },
+    { category: '风险标签', name: '限额校验', tone: 'orange' }
+  ],
+  a9: [
+    { category: '业务标签', name: '协议管理', tone: 'blue' },
+    { category: '产品标签', name: '核心链路', tone: 'red' },
+    { category: '技术标签', name: 'Spring Boot', tone: 'green' }
+  ]
+};
+
+const seedLineageRoot = {
+  id: 'root-bank',
+  label: '银行科技资产架构',
+  type: '根节点',
+  status: 'normal',
+  children: [
+    {
+      id: 'vc-retail', label: '个人金融价值链', type: '价值链', status: 'normal',
+      children: [
+        {
+          id: 'domain-core-acc', label: '核心账务领域', type: '领域', status: 'normal',
+          children: [
+            {
+              id: 'activity-deposit', label: '存款与账户管理', type: '主题活动', status: 'normal',
+              children: [
+                { id: 'func-acc-open', label: '个人一类户开立', type: '业务功能', status: 'normal' },
+                { id: 'func-pnsa', label: '个人养老金开户流程', type: '业务功能', status: 'normal', highlight: true },
+                { id: 'func-acc-freeze', label: '账户单边冻结', type: '业务功能', status: 'warning' },
+                { id: 'func-acc-balance', label: '核心余额高频查询', type: '业务功能', status: 'normal' }
+              ]
+            },
+            {
+              id: 'activity-eod', label: '日终批处理', type: '主题活动', status: 'normal',
+              children: [
+                { id: 'func-batch-interest', label: '批量结息与记账', type: '业务功能', status: 'normal' },
+                { id: 'func-batch-gl', label: '总账分账核对', type: '业务功能', status: 'offline' }
+              ]
+            }
+          ]
+        },
+        {
+          id: 'domain-channel', label: '电子渠道领域', type: '领域', status: 'normal',
+          children: [
+            {
+              id: 'activity-mobile-ops', label: '手机银行运营', type: '主题活动', status: 'normal',
+              children: [
+                { id: 'func-auth-login', label: '统一身份认证与登录', type: '业务功能', status: 'normal' },
+                { id: 'func-agrt', label: '开户协议落库', type: '业务功能', status: 'normal' },
+                { id: 'func-msg-push', label: '动账通知触达', type: '业务功能', status: 'normal' }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      id: 'vc-risk-comp', label: '全面风险与合规价值链', type: '价值链', status: 'normal',
+      children: [
+        {
+          id: 'domain-credit-risk', label: '信贷风控领域', type: '领域', status: 'normal',
+          children: [
+            {
+              id: 'activity-pre-loan', label: '贷前反欺诈审查', type: '主题活动', status: 'normal',
+              children: [
+                { id: 'func-pboc-query', label: '人行二代征信数据调用', type: '业务功能', status: 'normal' },
+                { id: 'func-graph-rule', label: '关系图谱团伙欺诈识别', type: '业务功能', status: 'normal' }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      id: 'vc-data', label: '数据资产与洞察价值链', type: '价值链', status: 'normal',
+      children: [
+        {
+          id: 'domain-data-mid', label: '数据中台领域', type: '领域', status: 'normal',
+          children: [
+            {
+              id: 'activity-data-gov', label: '数据治理与质量', type: '主题活动', status: 'normal',
+              children: [
+                { id: 'func-metadata', label: '元数据管理体系', type: '业务功能', status: 'normal' },
+                { id: 'func-lineage', label: '全链路血缘分析', type: '业务功能', status: 'normal' }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+};

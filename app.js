@@ -1,7 +1,14 @@
 (function () {
   'use strict';
 
-  const LANES = ['业务需求', '需求承接', '需求拆解', '需求审核', '已完成'];
+  const LANES = ['业务需求', '需求承接', '产品拆解', '业务审核', '已完成'];
+  const POOL_LANE_META = {
+    业务需求: { subtitle: '业务提出' },
+    需求承接: { subtitle: '产品端' },
+    产品拆解: { subtitle: '拆分规划' },
+    业务审核: { subtitle: '方案验收' },
+    已完成: { subtitle: '运转结束' }
+  };
   const PRODUCT_SESSION_ID = 'chat-product-1';
   const LOGO_URL = 'assets/logo.png';
   const AVATARS = {
@@ -12,19 +19,28 @@
 
   const ICONS = {
     home: ['M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8', 'M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z'],
-    workbench: ['M4 4h6v6H4z', 'M14 4h6v6h-6z', 'M4 14h6v6H4z', 'M14 14h6v6h-6z'],
+    workbench: ['M3 5h18', 'M7 9h6', 'M7 16h10', 'M3 12h18', 'M3 19h18'],
     chat: ['M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z'],
     workflow: ['M6 3v12', 'M18 9v6', 'M6 21a3 3 0 0 1 0-6', 'M18 9a3 3 0 0 1 0-6', 'M6 15h12'],
     log: ['M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7z', 'M14 2v4a2 2 0 0 0 2 2h4', 'M10 13h8', 'M10 17h6'],
     caret: ['M6 9l6 6 6-6'],
     search: ['M11 19a8 8 0 1 0 0-16 8 8 0 0 0 0 16z', 'M21 21l-4.3-4.3'],
+    assetSearch: ['M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z', 'M14 2v6h6', 'M11 18h.01', 'M11 14h.01', 'M11 10h.01'],
+    assetMatrix: ['M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z', 'M3.3 7l8.7 5 8.7-5', 'M12 22V12'],
     edit: ['M12 20h9', 'M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z'],
     send: ['M22 2 11 13', 'M22 2 15 22l-4-9-9-4Z'],
     document: ['M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7z', 'M14 2v4a2 2 0 0 0 2 2h4', 'M10 13h8', 'M10 17h5'],
     eye: ['M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z', 'M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z'],
     copy: ['M16 16H6a2 2 0 0 1-2-2V6', 'M8 8h10a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2z'],
     download: ['M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4', 'M7 10l5 5 5-5', 'M12 15V3'],
+    upload: ['M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4', 'M17 8l-5-5-5 5', 'M12 3v13'],
     share: ['M4 12v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7', 'M16 6l-4-4-4 4', 'M12 2v13'],
+    user: ['M20 21a8 8 0 1 0-16 0', 'M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8'],
+    assignee: ['M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2', 'M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8', 'M23 21v-2a4 4 0 0 0-3-3.87', 'M16 3.13a4 4 0 0 1 0 7.75'],
+    calendar: ['M8 2v4', 'M16 2v4', 'M3 10h18', 'M5 4h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z'],
+    layoutRows: ['M3 6h18', 'M3 12h18', 'M3 18h18'],
+    layoutCols: ['M8 6v12', 'M16 6v12', 'M4 4h16a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1z'],
+    tag: ['M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 0 1 0 2.828l-7 7a2 2 0 0 1-2.828 0l-7-7A1.994 1.994 0 0 1 3 12V7a4 4 0 0 1 4-4z'],
     close: ['M18 6 6 18', 'M6 6l12 12']
   };
 
@@ -45,7 +61,20 @@
     activeDocMode: 'business',
     activeConversationId: 'chat-business-1',
     expandedPoolLane: null,
+    poolView: 'vertical',
+    poolFilter: 'all',
+    poolFilterOpen: false,
     poolKeyword: '',
+    poolBoard: JSON.parse(JSON.stringify(seedPoolBoard)),
+    assetKeyword: '',
+    assetShowResults: false,
+    assetActiveType: 'business-asset',
+    assetScope: 'all',
+    assetFramework: '全部框架类型',
+    assetFrameworkOpen: false,
+    assetPage: 1,
+    assetPageSize: 15,
+    assetMatrixView: 'matrix',
     homePrompt: '我想做一个个人养老金开户流程改造，需要开户协议落库、账户选择和结果凭证。',
     draft: '',
     mentionOpen: false,
@@ -107,6 +136,30 @@
     return `<span class="status ${kind}">${esc(status)}</span>`;
   }
 
+  function poolStatusKind(status) {
+    if (status.includes('退回')) return 'reject';
+    if (status.includes('完成')) return 'done';
+    if (status.includes('审核')) return 'review';
+    if (status.includes('分析')) return 'analyze';
+    if (status.includes('承接')) return 'accept';
+    return 'draft';
+  }
+
+  function poolStatusPill(status) {
+    return `<span class="pool-status ${poolStatusKind(status)}">${esc(status)}</span>`;
+  }
+
+  function hatTone(key) {
+    const tones = ['indigo', 'orange', 'emerald', 'sky'];
+    let hash = 0;
+    for (let i = 0; i < key.length; i += 1) hash = key.charCodeAt(i) + ((hash << 5) - hash);
+    return tones[Math.abs(hash) % tones.length];
+  }
+
+  function poolPersonIcon(card) {
+    return card.type === 'business' ? icon('user', 14) : icon('assignee', 14);
+  }
+
   function activeConversation() {
     return state.conversations.find((c) => c.id === state.activeConversationId);
   }
@@ -161,13 +214,13 @@
   }
 
   function laneClass(lane) {
-    return { 业务需求: 'lane-blue', 需求承接: 'lane-sky', 需求拆解: 'lane-indigo', 需求审核: 'lane-amber', 已完成: 'lane-emerald' }[lane];
+    return { 业务需求: 'lane-blue', 需求承接: 'lane-sky', 产品拆解: 'lane-indigo', 业务审核: 'lane-amber', 已完成: 'lane-emerald' }[lane];
   }
 
   function partLaneClass(lane) {
     if (lane === '需求承接') return 'col-2';
-    if (lane === '需求拆解') return 'col-3';
-    if (lane === '需求审核') return 'col-4';
+    if (lane === '产品拆解' || lane === '需求拆解') return 'col-3';
+    if (lane === '业务审核' || lane === '需求审核') return 'col-4';
     if (lane === '已完成') return 'col-5';
     return 'col-2';
   }
@@ -178,7 +231,7 @@
 
   function partTimeLabel(part) {
     const req = activeRequirement();
-    const prefix = part.lane === '需求承接' ? '派发时间' : part.lane === '需求拆解' ? '承接时间' : part.lane === '需求审核' ? '提交时间' : '完成时间';
+    const prefix = part.lane === '需求承接' ? '派发时间' : (part.lane === '产品拆解' || part.lane === '需求拆解') ? '承接时间' : (part.lane === '业务审核' || part.lane === '需求审核') ? '提交时间' : '完成时间';
     const stamp = part.time?.includes('-') ? part.time : `${req.createTime.slice(0, 10)} ${part.time || '10:00'}`;
     return `${prefix}：${stamp}`;
   }
@@ -281,59 +334,75 @@
     return part?.lane || '业务需求';
   }
 
-  function poolCards(lane) {
+  function poolBoardCards(lane) {
     const keyword = state.poolKeyword.trim();
-    return allFlowCards().filter((card) => {
-      const laneMatch = lane === '业务需求'
-        ? card.type === 'business' || card.status.includes('退回')
-        : card.type === 'product' && activeRequirementLane(card) === lane && !card.status.includes('退回');
-      const keywordMatch = !keyword || `${card.title}${card.parentTitle || ''}${card.domain}${card.person}`.includes(keyword);
-      return laneMatch && keywordMatch;
+    const mineNames = state.currentRole === 'business' ? ['王建国', '王大陆', '刘业务'] : ['房产品', '陈产品', '吴产品', '周开发', '李一飞', '王产品'];
+    return state.poolBoard.filter((card) => {
+      if (card.lane !== lane) return false;
+      if (state.poolFilter === 'mine' && !mineNames.includes(card.person)) return false;
+      const haystack = `${card.title}${card.person}${card.relation || ''}${card.id}`;
+      return !keyword || haystack.includes(keyword);
     });
   }
 
-  function workbenchCards(lane) {
-    const req = activeRequirement();
-    const returnedToBusiness = req.parts.some((part) => part.lane === '业务需求' && part.status.includes('退回'));
-    const productCards = req.parts.map((part, index) => ({
-      id: `#${part.id}`,
-      lane: part.lane,
-      requirementId: req.id,
-      title: part.title,
-      meta: `关联业务需求：${req.title}`,
-      tag: index === 0 ? '核心链路' : '客户体验',
-      tagClass: index === 0 ? 'red' : 'blue',
-      footer: part.lane === '需求承接' ? `${part.owner} 待承接` : part.lane === '需求拆解' ? `${part.owner} 承接于 ${part.time}` : part.lane === '需求审核' ? `${part.owner} 提交于 2026-10-10 13:40` : `${part.owner} 完成于 2026-10-10 14:10`,
-      actor: part.lane === '需求承接' ? '' : part.lane === '需求拆解' ? `${part.owner} 承接于 ${part.time}` : part.lane === '需求审核' ? `${part.owner} 提交于 2026-10-10 13:40` : `${part.owner} 完成于 2026-10-10 14:10`
-    }));
-    const businessCard = {
-      id: `#${req.id}`,
-      lane: '业务需求',
-      requirementId: req.id,
-      title: req.title,
-      meta: `${req.creator} 创建于 ${req.createTime.slice(0, 16)}`,
-      returned: returnedToBusiness,
-      children: showProgressProductCard() ? req.parts.map((part, index) => ({
-        tag: index === 0 ? '核心链路' : req.domain,
-        tagClass: index === 0 ? 'red' : 'blue',
-        part: `产品需求${index + 1}`,
-        title: part.title
-      })) : []
-    };
-    const cards = [businessCard, ...(showProgressProductCard() ? productCards : [])];
-    const keyword = state.poolKeyword.trim();
-    return cards.filter((card) => card.lane === lane && (!keyword || `${card.title}${card.meta}`.includes(keyword)));
+  function renderPoolCard(card, horizontal) {
+    const bizGroup = card.relation || card.title;
+    const tone = card.relation ? hatTone(card.relation) : '';
+    let relationHtml = '';
+    let wrapClass = 'pool-card-wrap';
+    if (card.relation) {
+      if (horizontal) {
+        relationHtml = `<div class="card-side-tag hat-${tone}"><span>关联</span><em title="${esc(card.relation)}">${esc(card.relation)}</em></div>`;
+        wrapClass += ' has-side-tag horizontal-card';
+      } else {
+        relationHtml = `<div class="card-hat hat-${tone}">${icon('tag', 14)}<span title="${esc(card.relation)}">关联: ${esc(card.relation)}</span></div>`;
+        wrapClass += ' has-hat';
+      }
+    }
+    return `<button class="${wrapClass}" data-action="open-requirement" data-id="${esc(card.requirementId)}" data-biz-group="${esc(bizGroup)}">
+      ${relationHtml}
+      <div class="card-inner-box">
+        <div class="pool-card-top">
+          <span>#${esc(card.id)}</span>
+          ${poolStatusPill(card.status)}
+        </div>
+        <h3>${esc(card.title)}</h3>
+        <div class="pool-card-footer">
+          <span class="domain-tag domain-${card.domainTone || 'blue'}">${esc(card.domain || '')}</span>
+          <div class="person-time">
+            <span>${poolPersonIcon(card)}${esc(card.personLabel)}: ${esc(card.person)}</span>
+            <span>${icon('calendar', 14)}${esc(card.time)}</span>
+          </div>
+        </div>
+      </div>
+    </button>`;
   }
 
-  function poolLaneTitle(lane) {
-    const count = workbenchCards(lane).length;
-    return {
-      业务需求: `业务需求 ${count}`,
-      需求承接: `需求待承接 ${count}`,
-      需求拆解: `产品拆解 ${count}`,
-      需求审核: `业务审核中 ${count}`,
-      已完成: `已完成 ${count}`
-    }[lane];
+  function renderPoolLaneHead(lane, count, horizontal, expanded) {
+    const meta = POOL_LANE_META[lane];
+    if (horizontal) {
+      return `<div class="pool-lane-rail ${laneClass(lane)}">
+        <i></i>
+        <div class="pool-lane-rail-text">
+          <strong>${esc(lane)}</strong>
+          <span>${esc(meta.subtitle)}</span>
+        </div>
+        <b>${count}</b>
+      </div>`;
+    }
+    return `<header class="pool-lane-head-v2">
+      <div class="pool-lane-title">
+        <i></i>
+        <div>
+          <strong>${esc(lane)}</strong>
+          <span>${esc(meta.subtitle)}</span>
+        </div>
+        <b>${count}</b>
+      </div>
+      <button class="pool-lane-expand ${expanded ? 'active' : ''}" data-action="expand-lane" data-lane="${esc(lane)}" title="${expanded ? '收起' : '展开'}">
+        <span class="expand-glyph ${expanded ? 'active' : ''}" aria-hidden="true"></span>
+      </button>
+    </header>`;
   }
 
   function pushMessage(msg) {
@@ -382,10 +451,6 @@
       <div class="hero-block">
         <div class="brand"><img class="brand-logo-img" src="${LOGO_URL}" alt=""/>业务需求平台</div>
         <h1>做需求 更简单</h1>
-        <div class="role-switch">
-          <button class="active">我是业务（我要提出需求）</button>
-          <button>我是产品（我要分析需求）</button>
-        </div>
         <div class="home-input">
           <textarea data-field="homePrompt" placeholder="请描述一下你想要做什么～">${esc(state.homePrompt)}</textarea>
           <button data-action="create-conversation" title="生成会话">${icon('send', 18)}</button>
@@ -411,46 +476,303 @@
     </section>`;
   }
 
-  function renderPool() {
-    return `<section class="pool-view">
-      <header class="pool-head">
-        <h2>工作台</h2>
-        <div class="pool-search">${icon('search', 16)}<input data-field="poolKeyword" value="${esc(state.poolKeyword)}" placeholder="输入需求名称和关键字查找需求文档"/></div>
-      </header>
-      <div class="pool-kanban">
-        ${LANES.map((lane) => {
-          const collapsed = state.expandedPoolLane && state.expandedPoolLane !== lane;
-          const expanded = state.expandedPoolLane === lane;
-          if (collapsed) {
-            return `<section class="pool-lane ${laneClass(lane)} collapsed">
-              <button class="pool-lane-collapsed" data-action="expand-lane" data-lane="${esc(lane)}">
-                <i></i><span>${esc(lane)}</span><b>${poolCards(lane).length}</b>
-              </button>
-            </section>`;
-          }
-          const cards = workbenchCards(lane);
-          return `<section class="pool-lane ${laneClass(lane)} ${expanded ? 'expanded' : ''}">
-            <header class="pool-lane-head"><div><strong>${esc(poolLaneTitle(lane))}</strong></div></header>
-            <div class="pool-card-list ${expanded ? 'grid' : ''}">
-              ${cards.map((card) => `
-                <button class="workbench-card ${card.returned ? 'returned' : ''}" data-action="open-requirement" data-id="${esc(card.requirementId)}">
-                  ${card.returned ? '<b class="returned-badge">已退回</b>' : ''}
-                  <h3>${esc(card.title)}</h3>
-                  <p>${esc(card.meta)}</p>
-                  ${card.children?.length ? `<div class="workbench-children">${card.children.map((child) => `
-                    <div class="workbench-child">
-                      <span class="biz-tag ${child.tagClass}">${esc(child.tag)}</span>
-                      <em>${esc(child.part)}</em>
-                      <strong>${esc(child.title)}</strong>
-                    </div>`).join('')}</div>` : `
-                    ${card.tag ? `<span class="biz-tag ${card.tagClass}">${esc(card.tag)}</span>` : ''}
-                    <small>${esc(card.footer)}</small>
-                    ${!card.children?.length && card.actor ? `<footer>${esc(card.id)}<span>${esc(card.actor)}</span></footer>` : ''}`}
-                </button>`).join('')}
-            </div>
-          </section>`;
-        }).join('')}
+  function renderAssetStatIcon(item, compact = false) {
+    const cls = compact ? 'asset-tab-icon' : 'asset-stat-icon';
+    if (item.glyph === 'biz') {
+      return `<span class="${cls} tone-${item.tone} shape-square"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16v12H4z"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/><path d="M9 12h6"/></svg></span>`;
+    }
+    if (item.glyph === 'prod') {
+      return `<span class="${cls} tone-${item.tone}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><path d="M3.3 7l8.7 5 8.7-5"/></svg></span>`;
+    }
+    if (item.glyph === 'func') {
+      return `<span class="${cls} tone-${item.tone}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></span>`;
+    }
+    if (item.glyph === 'node') {
+      return `<span class="${cls} tone-${item.tone} shape-square"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></span>`;
+    }
+    if (item.glyph === 'table') {
+      return `<span class="${cls} tone-${item.tone}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M4 10h16M4 15h16M10 4v16"/></svg></span>`;
+    }
+    if (item.glyph === 'alert') {
+      return `<span class="${cls} tone-${item.tone}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4M12 17h.01"/><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg></span>`;
+    }
+    return `<span class="${cls} tone-${item.tone}"><em>${esc(item.glyph)}</em></span>`;
+  }
+
+  function assetMineOwners() {
+    return state.currentRole === 'business' ? ['王大陆', '王建国', '陈静'] : ['房产品', '陈产品', '李一飞'];
+  }
+
+  function filteredAssetResults() {
+    const keyword = state.assetKeyword.trim().toLowerCase();
+    return seedAssetResults.filter((item) => {
+      if (item.type !== state.assetActiveType) return false;
+      if (state.assetScope === 'mine' && !item.mine && !assetMineOwners().includes(item.owner)) return false;
+      if (state.assetFramework !== '全部框架类型' && item.framework !== state.assetFramework) return false;
+      const haystack = `${item.name}${item.code}${item.desc}${item.tag}${item.owner}`.toLowerCase();
+      return !keyword || haystack.includes(keyword);
+    });
+  }
+
+  function assetResultTotal() {
+    const stat = assetStats.find((item) => item.id === state.assetActiveType);
+    const filtered = filteredAssetResults();
+    if (!state.assetKeyword.trim() && state.assetScope === 'all' && state.assetFramework === '全部框架类型') {
+      return stat?.count ?? filtered.length;
+    }
+    return filtered.length;
+  }
+
+  function paginatedAssetResults() {
+    const filtered = filteredAssetResults();
+    if (filtered.length === 0) return [];
+
+    const total = assetResultTotal();
+    const pages = Math.max(1, Math.ceil(total / state.assetPageSize));
+    const page = Math.min(state.assetPage, pages);
+    const start = (page - 1) * state.assetPageSize;
+    const count = Math.min(state.assetPageSize, Math.max(0, total - start));
+
+    if (filtered.length >= total) {
+      return filtered.slice(start, start + count);
+    }
+
+    return Array.from({ length: count }, (_, index) => filtered[(start + index) % filtered.length]);
+  }
+
+  function renderAssetSearchBar(compact = false) {
+    return `<div class="asset-search-bar ${compact ? 'compact' : ''}">
+      <input data-field="assetKeyword" value="${esc(state.assetKeyword)}" placeholder="请输入应用节点/资产的名称、编码关键词搜索"/>
+      <button class="asset-search-submit ${compact ? 'text-btn' : ''}" data-action="asset-search" title="搜索">${compact ? '搜索' : icon('send', 18)}</button>
+    </div>`;
+  }
+
+  function renderAssetCategoryTabs() {
+    return `<div class="asset-category-tabs">${assetStats.map((item) => `
+      <button class="asset-category-tab ${state.assetActiveType === item.id ? 'active' : ''}" data-action="set-asset-type" data-type="${esc(item.id)}">
+        ${renderAssetStatIcon(item, true)}
+        <span>${esc(item.label)}</span>
+      </button>`).join('')}</div>`;
+  }
+
+  function renderAssetResultCard(item) {
+    return `<article class="asset-result-card">
+      <div class="asset-result-card-head">
+        <span class="asset-result-icon">${renderAssetStatIcon(assetStats.find((s) => s.id === item.type) || assetStats[0], true)}</span>
+        <div class="asset-result-titles">
+          <h3>${esc(item.name)}</h3>
+          <code>${esc(item.code)}</code>
+        </div>
       </div>
+      <p class="asset-result-desc">${esc(item.desc)}</p>
+      <span class="asset-result-tag">${esc(item.tag)}</span>
+      <footer class="asset-result-footer">
+        <span class="asset-result-owner">${esc(item.owner)}</span>
+        <div class="asset-result-actions">
+          <button class="primary" data-action="asset-knowledge" data-id="${esc(item.id)}">查看知识库</button>
+          <button class="outline" data-action="asset-rd-flow" data-id="${esc(item.id)}">前往研发流程</button>
+        </div>
+      </footer>
+    </article>`;
+  }
+
+  function renderAssetPagination(total) {
+    const pages = Math.max(1, Math.ceil(total / state.assetPageSize));
+    const current = Math.min(state.assetPage, pages);
+    const pageItems = [];
+    if (pages <= 8) {
+      for (let i = 1; i <= pages; i += 1) pageItems.push(i);
+    } else {
+      pageItems.push(1, 2, 3, 4, 5, 6, '...', pages);
+    }
+    return `<div class="asset-pagination">
+      <span class="asset-page-total">共 ${total.toLocaleString('zh-CN')} 条</span>
+      <div class="asset-page-nav">
+        <button class="asset-page-btn" data-action="set-asset-page" data-page="${current - 1}" ${current <= 1 ? 'disabled' : ''}>&lt;</button>
+        ${pageItems.map((page) => {
+          if (page === '...') return '<span class="asset-page-ellipsis">...</span>';
+          return `<button class="asset-page-btn ${page === current ? 'active' : ''}" data-action="set-asset-page" data-page="${page}">${page}</button>`;
+        }).join('')}
+        <button class="asset-page-btn" data-action="set-asset-page" data-page="${current + 1}" ${current >= pages ? 'disabled' : ''}>&gt;</button>
+      </div>
+      <label class="asset-page-size">
+        <select data-field="assetPageSize">
+          ${[15, 30, 50].map((size) => `<option value="${size}" ${state.assetPageSize === size ? 'selected' : ''}>${size}条/页</option>`).join('')}
+        </select>
+      </label>
+    </div>`;
+  }
+
+  function renderAssetResults() {
+    const total = assetResultTotal();
+    const cards = paginatedAssetResults();
+    return `<section class="asset-search-view asset-results-view">
+      <div class="asset-results-top">
+        <button class="asset-back-btn" data-action="back-asset-home">${icon('caret', 14, 'back-icon')}返回</button>
+        ${renderAssetSearchBar(true)}
+        ${renderAssetCategoryTabs()}
+      </div>
+      <div class="asset-results-toolbar">
+        <div class="asset-scope-tabs">
+          <button class="${state.assetScope === 'all' ? 'active' : ''}" data-action="set-asset-scope" data-scope="all">全平台</button>
+          <button class="${state.assetScope === 'mine' ? 'active' : ''}" data-action="set-asset-scope" data-scope="mine">我负责的</button>
+        </div>
+        <div class="asset-framework-filter ${state.assetFrameworkOpen ? 'open' : ''}">
+          <button class="asset-framework-btn" data-action="toggle-asset-framework">${esc(state.assetFramework)}${icon('caret', 12)}</button>
+          ${state.assetFrameworkOpen ? `<div class="asset-framework-menu">
+            ${assetFrameworkOptions.map((option) => `<button class="${state.assetFramework === option ? 'active' : ''}" data-action="set-asset-framework" data-framework="${esc(option)}">${esc(option)}</button>`).join('')}
+          </div>` : ''}
+        </div>
+      </div>
+      <div class="asset-result-grid">
+        ${cards.length ? cards.map(renderAssetResultCard).join('') : '<div class="asset-result-empty">暂无匹配资产，请调整关键词或筛选条件</div>'}
+      </div>
+      ${renderAssetPagination(total)}
+    </section>`;
+  }
+
+  function runAssetSearch() {
+    state.assetShowResults = true;
+    state.assetPage = 1;
+    state.assetFrameworkOpen = false;
+    render();
+  }
+
+  function renderAssetSearch() {
+    if (state.assetShowResults) return renderAssetResults();
+
+    const statsMarkup = assetStats.map((item) => `
+      <button class="asset-stat-card" data-action="open-asset-results" data-type="${esc(item.id)}">
+        ${renderAssetStatIcon(item)}
+        <div class="asset-stat-body">
+          <strong>${esc(item.label)}</strong>
+          <b>${item.count.toLocaleString('zh-CN')}</b>
+        </div>
+      </button>`).join('');
+
+    return `<section class="asset-search-view">
+      <div class="asset-search-hero">
+        <h1 class="asset-search-title">
+          <span class="title-main">资产库</span><span class="title-accent">全局搜索</span>
+          <i class="title-swoosh" aria-hidden="true"></i>
+        </h1>
+        <p class="asset-search-types">业务资产、产品资产、业务功能</p>
+        ${renderAssetSearchBar(false)}
+      </div>
+      <div class="asset-stats-panel">
+        <div class="asset-stats-grid">${statsMarkup}</div>
+      </div>
+    </section>`;
+  }
+
+  function renderDomainMatrixRow(row) {
+    return `<div class="domain-matrix-row">
+      <div class="domain-matrix-l0"><span>${esc(row.label)}</span></div>
+      <div class="domain-matrix-l1-grid">
+        ${row.domains.map((domain) => `<button class="domain-matrix-chip" data-action="open-domain" data-id="${esc(row.id)}" data-domain="${esc(domain)}" title="${esc(domain)}">${esc(domain)}</button>`).join('')}
+      </div>
+    </div>`;
+  }
+
+  function renderDomainMatrixPanorama() {
+    return `<div class="domain-matrix-panel">
+      <header class="domain-matrix-panel-head">
+        <strong>领域总览</strong>
+        <span>L0 价值链 · L1 业务领域</span>
+      </header>
+      <div class="domain-matrix-body">
+        ${seedDomainMatrix.map(renderDomainMatrixRow).join('')}
+      </div>
+    </div>`;
+  }
+
+  function renderDomainMatrixCards() {
+    return `<div class="domain-card-view">
+      ${seedDomainMatrix.map((row) => `
+        <article class="domain-card-group">
+          <header class="domain-card-group-head">
+            <strong>${esc(row.label)}</strong>
+            <span>${row.domains.length} 个业务领域</span>
+          </header>
+          <div class="domain-card-group-grid">
+            ${row.domains.map((domain) => `<button class="domain-card-item" data-action="open-domain" data-id="${esc(row.id)}" data-domain="${esc(domain)}">${esc(domain)}</button>`).join('')}
+          </div>
+        </article>`).join('')}
+    </div>`;
+  }
+
+  function renderAssetMatrix() {
+    const isMatrix = state.assetMatrixView === 'matrix';
+    return `<section class="asset-view asset-matrix-view">
+      <header class="domain-matrix-head">
+        <div class="domain-matrix-head-text">
+          <h2>全行级业务领域矩阵 <em>(L0价值链 → L1业务领域)</em></h2>
+          <p>点击领域卡片可查看 L2 价值流 / L2.5 业务主题；点击业务主题进入左树右表明细。</p>
+        </div>
+        <div class="domain-matrix-head-tools">
+          <button class="domain-matrix-tool-btn" data-action="matrix-download">${icon('download', 16)}下载模板</button>
+          <button class="domain-matrix-tool-btn" data-action="matrix-upload">${icon('upload', 16)}上传</button>
+          <div class="domain-matrix-view-toggle">
+            <button class="${isMatrix ? 'active' : ''}" data-action="set-matrix-view" data-view="matrix">全景矩阵</button>
+            <button class="${!isMatrix ? 'active' : ''}" data-action="set-matrix-view" data-view="card">卡片视角</button>
+          </div>
+        </div>
+      </header>
+      <div class="domain-matrix-scroll">
+        ${isMatrix ? renderDomainMatrixPanorama() : renderDomainMatrixCards()}
+      </div>
+    </section>`;
+  }
+
+  function renderPool() {
+    const horizontal = state.poolView === 'horizontal';
+    const kanbanClass = horizontal ? 'pool-kanban pool-kanban-horizontal kanban-scroll' : 'pool-kanban pool-kanban-vertical kanban-scroll';
+    const laneMarkup = LANES.map((lane) => {
+      const cards = poolBoardCards(lane);
+      const isExpanded = state.expandedPoolLane === lane;
+      const isCollapsed = !horizontal && state.expandedPoolLane && state.expandedPoolLane !== lane;
+
+      if (isCollapsed) {
+        return `<button class="pool-lane pool-lane-slim ${laneClass(lane)}" data-action="expand-lane" data-lane="${esc(lane)}">
+          <i></i>
+          <span>${esc(lane)}</span>
+          <b>${cards.length}</b>
+        </button>`;
+      }
+
+      const laneClassName = `${laneClass(lane)} ${horizontal ? 'pool-lane-row' : 'pool-lane-col'}${isExpanded ? ' lane-expanded' : ''}`;
+      const listClass = `pool-card-list${horizontal ? ' horizontal' : ''}${isExpanded ? ' expanded-grid' : ''}`;
+
+      if (horizontal) {
+        return `<section class="pool-lane ${laneClassName}">
+          ${renderPoolLaneHead(lane, cards.length, true, false)}
+          <div class="${listClass}">${cards.map((c) => renderPoolCard(c, true)).join('')}</div>
+        </section>`;
+      }
+      return `<section class="pool-lane ${laneClassName}">
+        ${renderPoolLaneHead(lane, cards.length, false, isExpanded)}
+        <div class="${listClass}">${cards.map((c) => renderPoolCard(c, false)).join('')}</div>
+      </section>`;
+    }).join('');
+
+    return `<section class="pool-view">
+      <header class="pool-head pool-head-v2">
+        <div class="pool-search pool-search-wide">${icon('search', 16)}<input data-field="poolKeyword" value="${esc(state.poolKeyword)}" placeholder="输入需求名称和关键字查找需求文档"/></div>
+        <div class="pool-head-tools">
+          <div class="pool-filter ${state.poolFilterOpen ? 'open' : ''}">
+            <button class="pool-filter-btn" data-action="toggle-pool-filter">${esc(state.poolFilter === 'all' ? '全部' : '与我相关')}${icon('caret', 12)}</button>
+            ${state.poolFilterOpen ? `<div class="pool-filter-menu">
+              <button class="${state.poolFilter === 'all' ? 'active' : ''}" data-action="set-pool-filter" data-filter="all">全部</button>
+              <button class="${state.poolFilter === 'mine' ? 'active' : ''}" data-action="set-pool-filter" data-filter="mine">与我相关</button>
+            </div>` : ''}
+          </div>
+          <div class="pool-view-toggle">
+            <button class="${horizontal ? 'active' : ''}" data-action="set-pool-view" data-view="horizontal">${icon('layoutRows', 14)}横向</button>
+            <button class="${!horizontal ? 'active' : ''}" data-action="set-pool-view" data-view="vertical">${icon('layoutCols', 14)}纵向</button>
+          </div>
+        </div>
+      </header>
+      <div class="${kanbanClass}">${laneMarkup}</div>
     </section>`;
   }
 
@@ -658,6 +980,8 @@
   function renderMain() {
     if (state.page === 'home') return renderHome();
     if (state.page === 'pool') return renderPool();
+    if (state.page === 'asset-search') return renderAssetSearch();
+    if (state.page === 'asset-matrix') return renderAssetMatrix();
     return renderWorkspace();
   }
 
@@ -672,6 +996,8 @@
         <nav class="rail-nav">
           <button class="rail-icon ${state.page === 'home' ? 'active' : ''}" data-action="nav" data-page="home" title="首页">${icon('home')}</button>
           <button class="rail-icon ${state.page === 'pool' ? 'active' : ''}" data-action="nav" data-page="pool" title="工作台">${icon('workbench')}</button>
+          <button class="rail-icon ${state.page === 'asset-search' ? 'active' : ''}" data-action="nav" data-page="asset-search" title="资产检索">${icon('assetSearch')}</button>
+          <button class="rail-icon ${state.page === 'asset-matrix' ? 'active' : ''}" data-action="nav" data-page="asset-matrix" title="资产矩阵">${icon('assetMatrix')}</button>
           <button class="rail-icon ${state.page === 'workspace' ? 'active' : ''}" data-action="open-conversation" data-id="${esc(state.activeConversationId)}" title="会话">${icon('chat')}</button>
         </nav>
         ${renderRailSessions()}
@@ -690,6 +1016,21 @@
 
     const newMessages = root.querySelector('.messages');
     if (newMessages) newMessages.scrollTop = msgScrollTop;
+    bindPoolCardHover(root);
+  }
+
+  function bindPoolCardHover(root) {
+    root.querySelectorAll('.pool-card-wrap[data-biz-group]').forEach((card) => {
+      const group = card.dataset.bizGroup;
+      card.addEventListener('mouseenter', () => {
+        root.querySelectorAll(`.pool-card-wrap[data-biz-group="${CSS.escape(group)}"] .card-inner-box`).forEach((box) => box.classList.add('highlighted'));
+        root.querySelectorAll(`.pool-card-wrap[data-biz-group="${CSS.escape(group)}"] .card-hat, .pool-card-wrap[data-biz-group="${CSS.escape(group)}"] .card-side-tag`).forEach((el) => el.classList.add('highlighted'));
+      });
+      card.addEventListener('mouseleave', () => {
+        root.querySelectorAll(`.pool-card-wrap[data-biz-group="${CSS.escape(group)}"] .card-inner-box`).forEach((box) => box.classList.remove('highlighted'));
+        root.querySelectorAll(`.pool-card-wrap[data-biz-group="${CSS.escape(group)}"] .card-hat, .pool-card-wrap[data-biz-group="${CSS.escape(group)}"] .card-side-tag`).forEach((el) => el.classList.remove('highlighted'));
+      });
+    });
   }
 
   function openConversation(id) {
@@ -767,7 +1108,7 @@
     req.status = '已承接';
     const part = req.parts.find((p) => p.status === '待承接') || req.parts[0];
     part.status = '拆解中';
-    part.lane = '需求拆解';
+    part.lane = '产品拆解';
     state.aiDispatchRecommended = false;
     state.productSessionNoticeVisible = true;
     state.productSessionAvailable = false;
@@ -822,7 +1163,7 @@
   function submitReview() {
     const req = activeRequirement();
     const part = req.parts.find((p) => p.status === '拆解中') || req.parts[0];
-    part.lane = '需求审核';
+    part.lane = '业务审核';
     part.status = '待业务审核';
     state.reviewPromptVisible = false;
     state.reviewStickyVisible = true;
@@ -844,7 +1185,7 @@
   function returnReview() {
     const req = activeRequirement();
     const part = req.parts.find((p) => p.status === '待业务审核') || req.parts[0];
-    part.lane = '需求拆解';
+    part.lane = '产品拆解';
     part.status = '退回修改';
     state.reviewStickyVisible = false;
     state.reviewPromptVisible = false;
@@ -856,6 +1197,7 @@
     switch (action) {
       case 'nav':
         state.page = el.dataset.page;
+        state.poolFilterOpen = false;
         render();
         break;
       case 'open-conversation':
@@ -879,7 +1221,21 @@
         setRole(el.dataset.role);
         break;
       case 'expand-lane':
-        state.expandedPoolLane = el.dataset.lane;
+        state.expandedPoolLane = state.expandedPoolLane === el.dataset.lane ? null : el.dataset.lane;
+        render();
+        break;
+      case 'toggle-pool-filter':
+        state.poolFilterOpen = !state.poolFilterOpen;
+        render();
+        break;
+      case 'set-pool-filter':
+        state.poolFilter = el.dataset.filter;
+        state.poolFilterOpen = false;
+        render();
+        break;
+      case 'set-pool-view':
+        state.poolView = el.dataset.view;
+        if (state.poolView === 'horizontal') state.expandedPoolLane = null;
         render();
         break;
       case 'open-progress':
@@ -947,6 +1303,60 @@
       case 'dispatch-or-review':
         dispatchOrReview();
         break;
+      case 'asset-search':
+        runAssetSearch();
+        break;
+      case 'back-asset-home':
+        state.assetShowResults = false;
+        state.assetFrameworkOpen = false;
+        render();
+        break;
+      case 'open-asset-results':
+        state.assetActiveType = el.dataset.type;
+        runAssetSearch();
+        break;
+      case 'set-asset-type':
+        state.assetActiveType = el.dataset.type;
+        state.assetPage = 1;
+        state.assetFrameworkOpen = false;
+        render();
+        break;
+      case 'set-asset-scope':
+        state.assetScope = el.dataset.scope;
+        state.assetPage = 1;
+        render();
+        break;
+      case 'toggle-asset-framework':
+        state.assetFrameworkOpen = !state.assetFrameworkOpen;
+        render();
+        break;
+      case 'set-asset-framework':
+        state.assetFramework = el.dataset.framework;
+        state.assetFrameworkOpen = false;
+        state.assetPage = 1;
+        render();
+        break;
+      case 'set-asset-page': {
+        const total = assetResultTotal();
+        const pages = Math.max(1, Math.ceil(total / state.assetPageSize));
+        const nextPage = Number(el.dataset.page);
+        if (!Number.isNaN(nextPage) && nextPage >= 1 && nextPage <= pages) {
+          state.assetPage = nextPage;
+          render();
+        }
+        break;
+      }
+      case 'asset-knowledge':
+      case 'asset-rd-flow':
+        break;
+      case 'set-matrix-view':
+        state.assetMatrixView = el.dataset.view;
+        render();
+        break;
+      case 'matrix-download':
+      case 'matrix-upload':
+      case 'open-domain':
+        break;
       default:
         break;
     }
@@ -966,6 +1376,7 @@
       state.poolKeyword = event.target.value;
       render();
     }
+    if (field === 'assetKeyword') state.assetKeyword = event.target.value;
     if (field === 'draft') {
       state.draft = event.target.value;
       const nextMention = state.draft.includes('@');
@@ -976,10 +1387,22 @@
     }
   });
 
+  document.getElementById('app').addEventListener('change', (event) => {
+    if (event.target.dataset.field === 'assetPageSize') {
+      state.assetPageSize = Number(event.target.value) || 15;
+      state.assetPage = 1;
+      render();
+    }
+  });
+
   document.getElementById('app').addEventListener('keydown', (event) => {
     if (event.target.dataset.field === 'draft' && event.key === 'Enter') {
       event.preventDefault();
       sendMessage();
+    }
+    if (event.target.dataset.field === 'assetKeyword' && event.key === 'Enter') {
+      event.preventDefault();
+      runAssetSearch();
     }
   });
 

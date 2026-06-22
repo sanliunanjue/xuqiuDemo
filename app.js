@@ -19,22 +19,19 @@
 
   const ICONS = {
     home: ['M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8', 'M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z'],
-    workbench: ['M3 5h18', 'M7 9h6', 'M7 16h10', 'M3 12h18', 'M3 19h18'],
     chat: ['M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z'],
-    workflow: ['M6 3v12', 'M18 9v6', 'M6 21a3 3 0 0 1 0-6', 'M18 9a3 3 0 0 1 0-6', 'M6 15h12'],
-    log: ['M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7z', 'M14 2v4a2 2 0 0 0 2 2h4', 'M10 13h8', 'M10 17h6'],
+    log: ['M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20z', 'M12 6v6l4 2'],
     caret: ['M6 9l6 6 6-6'],
     search: ['M11 19a8 8 0 1 0 0-16 8 8 0 0 0 0 16z', 'M21 21l-4.3-4.3'],
-    assetSearch: ['M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z', 'M14 2v6h6', 'M11 18h.01', 'M11 14h.01', 'M11 10h.01'],
-    assetMatrix: ['M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z', 'M3.3 7l8.7 5 8.7-5', 'M12 22V12'],
     edit: ['M12 20h9', 'M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z'],
     send: ['M22 2 11 13', 'M22 2 15 22l-4-9-9-4Z'],
     document: ['M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7z', 'M14 2v4a2 2 0 0 0 2 2h4', 'M10 13h8', 'M10 17h5'],
-    eye: ['M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z', 'M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z'],
+    fullscreen: ['M15 3h6v6', 'M9 21H3v-6', 'M21 3l-7 7', 'M3 21l7-7'],
     copy: ['M16 16H6a2 2 0 0 1-2-2V6', 'M8 8h10a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2z'],
     download: ['M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4', 'M7 10l5 5 5-5', 'M12 15V3'],
     upload: ['M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4', 'M17 8l-5-5-5 5', 'M12 3v13'],
-    share: ['M4 12v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7', 'M16 6l-4-4-4 4', 'M12 2v13'],
+    panelLeftClose: ['M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2z', 'M9 3v18'],
+    panelLeft: ['M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2z', 'M9 3v18', 'M15 9l-3 3 3 3'],
     user: ['M20 21a8 8 0 1 0-16 0', 'M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8'],
     assignee: ['M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2', 'M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8', 'M23 21v-2a4 4 0 0 0-3-3.87', 'M16 3.13a4 4 0 0 1 0 7.75'],
     calendar: ['M8 2v4', 'M16 2v4', 'M3 10h18', 'M5 4h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z'],
@@ -42,6 +39,40 @@
     layoutCols: ['M8 6v12', 'M16 6v12', 'M4 4h16a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1z'],
     tag: ['M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 0 1 0 2.828l-7 7a2 2 0 0 1-2.828 0l-7-7A1.994 1.994 0 0 1 3 12V7a4 4 0 0 1 4-4z'],
     close: ['M18 6 6 18', 'M6 6l12 12']
+  };
+
+  const ICON_FILLED = {
+    workbench: {
+      viewBox: '0 0 1024 1024',
+      path: 'M837.12 112.64H161.28c-43.52 0-76.8 35.84-76.8 76.8v468.48c0 43.52 35.84 76.8 76.8 76.8h276.48v156.16H215.04c-15.36 0-25.6 12.8-25.6 25.6 0 15.36 12.8 25.6 25.6 25.6h570.88c15.36 0 25.6-12.8 25.6-25.6 0-15.36-12.8-25.6-25.6-25.6h-243.2v-156.16h294.4c43.52 0 76.8-35.84 76.8-76.8V189.44c2.56-43.52-33.28-76.8-76.8-76.8z m25.6 545.28c0 15.36-12.8 25.6-25.6 25.6H161.28c-15.36 0-25.6-12.8-25.6-25.6V189.44c0-15.36 12.8-25.6 25.6-25.6h675.84c15.36 0 25.6 12.8 25.6 25.6v468.48z m0 0'
+    },
+    assetSearch: {
+      viewBox: '0 0 1157 1024',
+      paths: [
+        { d: 'M442.154805 0c237.545766 0 431.498805 62.482909 441.808831 167.382234l0.415169 8.856935V442.154805c0 23.872208-19.374545 43.246753-43.246753 43.246753-88.154182 0-133.753558 11.763117-165.790753 47.329247a221.700156 221.700156 0 0 0-56.947325 148.768831v1.383896c0 18.544208 0.484364 25.809662 2.283429 32.452364 16.053195 58.677195 51.204156 104.345766 118.599896 165.859948a43.246753 43.246753 0 0 1-16.606754 73.277299c-77.221403 23.318649-176.031584 36.258078-280.51574 36.258078-244.050078 0-442.154805-66.011844-442.154805-176.169974V176.239169C0 66.011844 198.104727 0 442.154805 0zM86.493506 711.945351v102.615896c0 36.673247 159.148052 89.745662 355.730494 89.745662 61.375792 0 120.329766-4.843636 172.710234-13.631377l9.410493-1.799065-10.656-11.901506c-28.923429-33.628675-49.958649-66.565403-64.627948-103.584623-34.597403 3.044571-70.371117 4.566857-106.836779 4.566857-145.793455 0-275.18774-23.526234-355.730494-66.011844z m0-212.774026v102.615896c0 36.673247 159.148052 89.745662 355.730494 89.745662 30.653299 0 60.753039-1.176312 89.884052-3.45974l-0.069195-6.504312c0-42.624 8.649351-83.933299 24.91013-121.782857-36.811636 3.59813-75.422338 5.397195-114.724987 5.397195-145.793455 0-275.18774-23.526234-355.730494-66.011844z m355.730494-146.692987c-145.793455 0-275.18774-23.595429-355.730494-66.081039v102.615896c0 36.673247 159.148052 89.745662 355.730494 89.745662 63.866805 0 125.311792-5.18961 179.906493-14.876883 41.932052-41.101714 93.205403-58.46961 167.313039-63.382442l8.580156-0.484363V286.466493c-80.542753 42.48561-209.937039 66.011844-355.799688 66.011845z m0-266.054026c-196.513247 0-355.661299 53.072416-355.661299 89.814857 0 36.673247 159.148052 89.745662 355.661299 89.745662 196.582442 0 355.799688-53.072416 355.799688-89.745662 0-36.742442-159.148052-89.814857-355.799688-89.814857z' },
+        { d: 'M807.918545 392.334545a282.591584 282.591584 0 0 1 231.940987 444.023065l102.546702 102.477507a49.82026 49.82026 0 1 1-70.578702 70.578701l-102.477506-102.546701a282.591584 282.591584 0 1 1-161.431481-514.601766z m0 99.709715a182.88187 182.88187 0 1 0 0 365.694545 182.88187 182.88187 0 0 0 0-365.694545z', opacity: 0.55 }
+      ]
+    },
+    assetMatrix: {
+      viewBox: '0 0 1156 1024',
+      paths: [
+        { d: 'M286.758182 4.429255A32.176129 32.176129 0 0 1 317.135325 3.349864l2.004584 1.079391 275.09048 158.82466a32.227528 32.227528 0 0 1 15.985265 25.699784v322.48088a32.124729 32.124729 0 0 1-13.004091 25.699783l-1.798984 1.284989-151.937119 97.659177a32.176129 32.176129 0 0 1-36.493692-52.941554l1.747585-1.233589 137.082644-87.996058V209.719124L303.154643 69.501106 64.352257 209.564925v284.548l133.279076 87.996058a32.176129 32.176129 0 0 1 10.279914 42.764439l-1.130791 1.798985a32.176129 32.176129 0 0 1-42.764439 10.279914l-1.798985-1.130791-147.722354-97.659176a32.07333 32.07333 0 0 1-14.391879-24.671792V191.16388A32.124729 32.124729 0 0 1 14.083481 164.590304l1.901784-1.18219z' },
+        { d: 'M832.724377 4.429255a32.07333 32.07333 0 0 1 30.325745-1.18219l2.31298 1.18219 275.09048 158.82466a32.227528 32.227528 0 0 1 15.985265 25.699784v322.48088a32.124729 32.124729 0 0 1-13.00409 25.699783l-1.798985 1.284989-151.937119 97.659177a32.176129 32.176129 0 0 1-36.493692-52.941554l1.747586-1.233589 137.082643-87.996058V209.719124L849.120839 69.501106l-254.736252 149.41854a32.227528 32.227528 0 0 1-42.918638-9.714518l-1.13079-1.798985a32.176129 32.176129 0 0 1 9.714518-42.867238l1.798985-1.130791z m-281.464026 489.272474a32.176129 32.176129 0 0 1 42.764439-10.279914l1.850385 1.079391 147.722354 97.659177a32.176129 32.176129 0 0 1-33.666716 54.791938l-1.798985-1.130791-147.722354-97.659176a32.124729 32.124729 0 0 1-9.149123-44.563425z' },
+        { d: 'M676.521095 397.276142a32.227528 32.227528 0 0 1 42.815839-10.279913l1.798984 1.13079 147.722355 97.659176a32.227528 32.227528 0 0 1 14.340479 24.723192v322.48088a32.227528 32.227528 0 0 1-13.980682 26.522177l-1.953184 1.233589-270.875716 158.824661a32.07333 32.07333 0 0 1-30.325744 1.18219l-2.055982-1.027992-274.936282-158.87606a32.278928 32.278928 0 0 1-16.036665-25.699783V512.719568a32.02193 32.02193 0 0 1 13.004091-25.699783l1.798985-1.23359 151.885719-97.659176a32.176129 32.176129 0 0 1 36.493692 52.941553l-1.747585 1.23359-137.134044 87.944658v284.136804l242.760153 140.218018 239.007984-140.063819v-284.548l-133.638873-88.150257a32.124729 32.124729 0 0 1-10.279913-42.764439l1.079391-1.798985z' }
+      ]
+    },
+    workflow: {
+      viewBox: '0 0 1024 1024',
+      path: 'M864 706.112c0-60.928-35.328-106.432-77.824-119.616-13.312 28.416-40.448 51.84-79.616 51.84H310.656c-42.432 0-70.784-27.52-82.688-59.008-75.392-15.552-128.896-88.768-131.456-171.456l-0.384-12.8C92.8 289.728 166.656 193.792 268.8 193.792h124.992C405.056 159.232 435.008 128 480.704 128v64c-15.36 0-27.84 14.4-27.84 32.128s12.48 32.128 27.84 32.128h334.592l5.632-0.64a30.336 30.336 0 0 0 21.696-24.96l0.512-6.528c0-15.488-9.536-28.48-22.208-31.488L815.296 192V128c58.944 0 91.84 51.84 91.84 96.128 0 44.224-32.896 96.128-91.84 96.128H480.704c-44.16 0-73.792-29.184-85.76-62.464H268.8c-57.408 0-111.296 56.768-108.8 135.296l0.448 12.8c1.664 52.864 31.04 92.224 67.072 106.624 11.712-31.936 40.256-60.032 83.072-60.032h395.904v64H310.656c-13.824 0-25.024 12.992-25.024 28.928 0 14.016 8.576 25.6 19.968 28.352l5.12 0.64h395.84l5.056-0.64c11.392-2.688 20.032-14.336 20.032-28.352 0-15.936-11.264-28.928-25.088-28.928v-64c46.976 0 76.672 33.792 85.952 69.312 79.808 16.832 135.488 96.32 135.488 184.32 0 99.2-70.656 187.52-167.04 187.52H457.28a90.56 90.56 0 0 1-57.024 61.44 87.232 87.232 0 0 1-104.96-40.064 97.024 97.024 0 0 1 0-96.512c22.272-38.4 65.92-53.76 104.96-40.128 24.96 8.704 43.904 27.648 53.632 51.328h307.072c52.8 0 103.04-50.944 103.04-123.52z m-477.824 128.512a41.6 41.6 0 0 0-28.16-0.384 35.968 35.968 0 0 0-24.96 32.512c0 11.136 7.68 26.432 24.96 32.512a41.6 41.6 0 0 0 28.16-0.384 38.592 38.592 0 0 0 19.904-16.256 32.128 32.128 0 0 0 4.16-12.16l0.256-3.712a31.808 31.808 0 0 0-4.416-15.872 38.656 38.656 0 0 0-19.904-16.256zM815.296 128v64H480.704V128h334.592z'
+    },
+    fullscreen: {
+      viewBox: '0 0 1024 1024',
+      path: 'M983.04 727.04a40.96 40.96 0 0 0-40.96 40.96v173.592381h-174.08a40.96 40.96 0 1 0 0 82.407619h173.592381A82.407619 82.407619 0 0 0 1024 941.592381v-173.592381a40.96 40.96 0 0 0-40.96-40.96zM941.592381 0h-173.592381a40.96 40.96 0 1 0 0 82.407619h173.592381v173.592381a40.96 40.96 0 1 0 82.407619 0V82.407619A82.407619 82.407619 0 0 0 941.592381 0zM256 941.592381H82.407619v-173.592381a40.96 40.96 0 1 0-82.407619 0v173.592381A82.407619 82.407619 0 0 0 82.407619 1024h173.592381a40.96 40.96 0 1 0 0-82.407619zM40.96 296.96a40.96 40.96 0 0 0 40.96-40.96V82.407619h174.08a40.96 40.96 0 1 0 0-82.407619H82.407619A82.407619 82.407619 0 0 0 0 82.407619v173.592381a40.96 40.96 0 0 0 40.96 40.96z m682.666667 425.20381H301.83619V301.83619h420.815239z m82.407619 0V301.83619a82.407619 82.407619 0 0 0-83.870476-82.407619H301.83619A82.407619 82.407619 0 0 0 219.428571 301.83619v420.815239a82.407619 82.407619 0 0 0 82.407619 81.92h420.815239a82.407619 82.407619 0 0 0 81.92-82.407619z'
+    },
+    copy: {
+      viewBox: '0 0 1024 1024',
+      path: 'M230.4 665.6a25.6 25.6 0 1 1 0 51.2h-102.4A128 128 0 0 1 0 588.8v-460.8A128 128 0 0 1 128 0h460.8A128 128 0 0 1 716.8 128v102.4a25.6 25.6 0 1 1-51.2 0v-102.4A76.8 76.8 0 0 0 588.8 51.2h-460.8A76.8 76.8 0 0 0 51.2 128v460.8A76.8 76.8 0 0 0 128 665.6h102.4z m204.8-307.2A76.8 76.8 0 0 0 358.4 435.2v460.8A76.8 76.8 0 0 0 435.2 972.8h460.8a76.8 76.8 0 0 0 76.8-76.8v-460.8A76.8 76.8 0 0 0 896 358.4h-460.8z m0-51.2h460.8A128 128 0 0 1 1024 435.2v460.8a128 128 0 0 1-128 128h-460.8A128 128 0 0 1 307.2 896v-460.8A128 128 0 0 1 435.2 307.2z'
+    }
   };
 
   const AGENT_STEPS = [
@@ -53,6 +84,18 @@
   ];
 
   const PROGRESS_STAGES = ['业务需求撰写', '需求待承接', '产品拆解', '审核产品文档', '完成'];
+  const PROGRESS_LAYOUT = {
+    bizColTop: 70,
+    bizCardPadding: 16,
+    bizTitleBlock: 26,
+    bizOwnerBlock: 44,
+    bizSectionGap: 10,
+    bizChildHeight: 54,
+    bizChildGap: 8,
+    miniCardHeight: 126,
+    miniCardGap: 20,
+    colTop: { 'col-2': 70, 'col-3': 238, 'col-4': 238, 'col-5': 418 }
+  };
   const LOG_ROWS = Array.from({ length: 8 }, () => ({ time: '2026-10-10 12:23', content: '派发亲情账户储蓄罐充值需求产品需求', actor: '王大陆' }));
 
   const state = {
@@ -70,8 +113,6 @@
     assetShowResults: false,
     assetActiveType: 'business-asset',
     assetScope: 'all',
-    assetFramework: '全部框架类型',
-    assetFrameworkOpen: false,
     assetPage: 1,
     assetPageSize: 15,
     matrixExpandedDomain: null,
@@ -88,6 +129,7 @@
     currentRole: 'business',
     roleMenuOpen: false,
     docOutlineCollapsed: false,
+    railCollapsed: false,
     agentExpanded: false,
     collapsedGroups: { 业务需求: false, 产品需求: false },
     requirements: JSON.parse(JSON.stringify(seedRequirements)),
@@ -122,6 +164,16 @@
   }
 
   function icon(name, size = 20, extraClass = '') {
+    const filled = ICON_FILLED[name];
+    if (filled) {
+      const body = filled.paths
+        ? filled.paths.map((p) => {
+          const opacity = p.opacity != null ? ` opacity="${p.opacity}"` : '';
+          return `<path d="${p.d}" fill="currentColor"${opacity}/>`;
+        }).join('')
+        : `<path d="${filled.path}" fill="currentColor"/>`;
+      return `<svg class="app-icon app-icon-filled ${extraClass}" width="${size}" height="${size}" viewBox="${filled.viewBox}" aria-hidden="true">${body}</svg>`;
+    }
     const paths = (ICONS[name] || []).map((d) => `<path d="${d}"/>`).join('');
     return `<svg class="app-icon ${extraClass}" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${paths}</svg>`;
   }
@@ -231,8 +283,10 @@
     return 'col-2';
   }
 
-  function partColumnX(laneClass) {
-    return { 'col-2': 300, 'col-3': 500, 'col-4': 700, 'col-5': 900 }[laneClass] ?? 300;
+  function progressChildAnchorY(index) {
+    const L = PROGRESS_LAYOUT;
+    const childrenTop = L.bizColTop + L.bizCardPadding + L.bizTitleBlock + 8 + L.bizOwnerBlock + L.bizSectionGap;
+    return childrenTop + index * (L.bizChildHeight + L.bizChildGap) + L.bizChildHeight / 2;
   }
 
   function partTimeLabel(part) {
@@ -279,31 +333,64 @@
 
   function progressCanvasHeight() {
     const columns = progressColumns();
-    const columnDepths = columns.map((column) => column.cards.length);
-    const maxDepth = Math.max(1, ...columnDepths, progressBusinessChildren().length);
-    return Math.max(520, 180 + maxDepth * 150);
+    const L = PROGRESS_LAYOUT;
+    const columnBottoms = columns.map((column) => {
+      const top = L.colTop[column.className] ?? 70;
+      return top + column.cards.length * (L.miniCardHeight + L.miniCardGap);
+    });
+    const childrenCount = progressBusinessChildren().length;
+    const childrenBottom = childrenCount
+      ? progressChildAnchorY(childrenCount - 1) + L.bizChildHeight / 2
+      : L.bizColTop + 220;
+    return Math.max(520, ...columnBottoms, childrenBottom) + 80;
   }
 
-  function progressFlowLines() {
-    if (!showProgressProductCard()) return [];
-    const req = activeRequirement();
-    const columnStacks = new Map();
-    const partCount = req.parts.length;
-    const startSpacing = partCount > 1 ? 44 : 0;
-    const startBaseY = 108;
-    const columnTopMap = { 'col-2': 70, 'col-3': 238, 'col-4': 238, 'col-5': 418 };
+  function updateProgressFlowLines() {
+    const canvas = document.querySelector('.progress-canvas-v3');
+    const svg = canvas?.querySelector('.flow-lines-v3');
+    if (!canvas || !svg || !showProgressProductCard()) return;
 
-    return req.parts.map((part, globalIndex) => {
-      const laneCls = partLaneClass(part.lane);
-      const indexInColumn = columnStacks.get(laneCls) ?? 0;
-      columnStacks.set(laneCls, indexInColumn + 1);
-      const startY = startBaseY + globalIndex * startSpacing;
-      const columnTop = columnTopMap[laneCls] ?? 70;
-      const endY = columnTop + indexInColumn * 150 + 72;
-      const endX = partColumnX(laneCls);
-      const midX = (150 + endX) / 2;
-      return `M150 ${startY} C${midX} ${startY}, ${midX} ${endY}, ${endX} ${endY}`;
-    });
+    const width = canvas.clientWidth;
+    const height = canvas.scrollHeight;
+    if (!width || !height) return;
+
+    const scale = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--app-scale')) || 1;
+    const canvasRect = canvas.getBoundingClientRect();
+
+    svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
+    svg.setAttribute('width', String(width));
+    svg.setAttribute('height', String(height));
+    svg.style.width = `${width}px`;
+    svg.style.height = `${height}px`;
+
+    const paths = activeRequirement().parts.map((part) => {
+      const fromEl = canvas.querySelector(`.progress-child[data-flow-id="${part.id}"]`);
+      const toEl = canvas.querySelector(`.progress-mini-card[data-flow-id="${part.id}"]`);
+      if (!fromEl || !toEl) return '';
+
+      const fromBox = fromEl.getBoundingClientRect();
+      const fromAnchor = fromEl.querySelector('strong') || fromEl;
+      const toAnchor = toEl.querySelector('h3') || toEl;
+      const fromAnchorRect = fromAnchor.getBoundingClientRect();
+      const toBox = toEl.getBoundingClientRect();
+      const toAnchorRect = toAnchor.getBoundingClientRect();
+
+      const startX = (fromBox.right - canvasRect.left) / scale;
+      const startY = (fromAnchorRect.top + fromAnchorRect.height / 2 - canvasRect.top) / scale + canvas.scrollTop;
+      const endX = (toBox.left - canvasRect.left) / scale;
+      const endY = (toAnchorRect.top + toAnchorRect.height / 2 - canvasRect.top) / scale + canvas.scrollTop;
+      const midX = (startX + endX) / 2;
+      return `<path d="M${startX} ${startY} C${midX} ${startY}, ${midX} ${endY}, ${endX} ${endY}"/>`;
+    }).filter(Boolean);
+
+    svg.innerHTML = paths.join('');
+  }
+
+  function bindProgressCanvasEvents(root) {
+    const canvas = root.querySelector('.progress-canvas-v3');
+    if (!canvas || canvas.dataset.flowBound) return;
+    canvas.dataset.flowBound = '1';
+    canvas.addEventListener('scroll', () => requestAnimationFrame(updateProgressFlowLines));
   }
 
   function allFlowCards() {
@@ -425,7 +512,7 @@
   }
 
   function renderProgressMiniCard(card) {
-    return `<article class="progress-mini-card">
+    return `<article class="progress-mini-card" data-flow-id="${esc(card.id)}">
       <h3>${esc(card.title)}</h3>
       <p>${esc(card.time)}</p>
       <div class="progress-owner">${avatar('product', 24, card.tone)}<b>${esc(card.person)}</b><em>小微企业金融部门</em></div>
@@ -590,12 +677,111 @@
     };
   }
 
-  function assetDetailTags(item) {
-    if (seedAssetTags[item?.id]) return seedAssetTags[item.id];
+  function assetTagHierarchy(item) {
+    return seedAssetTagHierarchy[item?.id] || {
+      valueChain: '个人金融价值链',
+      domain: '核心账务领域',
+      activity: '默认主题活动'
+    };
+  }
+
+  function assetDocumentMeta(type) {
+    if (type === 'business-asset') return { abbr: 'BRD', label: '业务需求说明书' };
+    if (type === 'product-asset') return { abbr: 'PRD', label: '产品需求文档' };
+    return { abbr: 'FDD', label: '功能文档' };
+  }
+
+  function buildDefaultAssetDocumentSections(item) {
+    const doc = assetDocumentMeta(item.type);
+    const meta = assetDetailMeta(item);
+    const tags = assetTagHierarchy(item);
+
+    if (item.type === 'business-asset') {
+      return [
+        { title: '1. 文档说明', paragraphs: [`本文档为「${item.name}」的业务需求说明书（BRD），编码 ${item.code}，用于明确业务诉求、流程边界、合规要求及与下游产品拆解的衔接关系。`, `文档归属${tags.valueChain} / ${tags.domain} / ${tags.activity}，由 ${item.owner} 负责维护，当前版本 ${meta.version}。`] },
+        { title: '1.1 文档目的', paragraphs: ['帮助业务、产品、研发、测试对需求范围形成一致理解，减少 BRD 到 PRD 之间的信息断点。', '作为业务验收与产品拆解的基准输入，支撑资产库版本管理与复用检索。'] },
+        { title: '1.2 适用范围', paragraphs: [`适用于与「${item.name}」相关的银行移动端、柜面及远程银行协同办理场景。`, '不含已下线渠道及未纳入本期改造的遗留流程。'] },
+        { title: '1.3 角色受众', items: ['业务经理：提出需求、组织评审、业务验收', '产品经理：承接 BRD、拆解 PRD', '研发/测试：依据 PRD 设计与验证', '合规与风控：审核规则与留痕要求'] },
+        { title: '2. 业务背景', paragraphs: [item.desc, '随着线上办理比例提升，客户对流程连贯性、结果可追溯性要求更高，需通过标准化业务资产沉淀可复用能力。'] },
+        { title: '3. 业务目标', items: ['实现核心流程线上化，降低网点人工介入比例', '关键节点留痕完整，满足内外部审计要求', '与关联产品资产形成清晰上下游映射', '支持后续渠道快速复用与差异化配置'] },
+        { title: '4. 业务范围', paragraphs: ['本节界定本期纳入与排除的业务能力，避免与关联项目产生范围重叠。'] },
+        { title: '4.1 纳入范围', items: [`${item.name}主流程及关键分支`, '客户身份核验与协议确认环节', '结果反馈、凭证生成与异常提示', '与限额、风控规则的基础联动'] },
+        { title: '4.2 排除范围', items: ['非本主题活动的增值营销能力', '跨行清算细节（由支付领域资产承接）', '历史数据迁移与批处理补偿（另行立项）'] },
+        { title: '5. 业务流程', paragraphs: ['标准流程分为客户发起、资格校验、协议/信息确认、核心交易处理、结果反馈五个阶段。', '任一步骤失败须给出可理解的错误原因，并保留可恢复路径（如返回上一步或联系客服）。'] },
+        { title: '6. 业务规则', items: ['客户须完成实名认证且账户状态正常', '单笔/单日限额遵循风控策略与监管要求', '协议签署未完成不得进入交易提交', '关键操作需记录操作人、渠道、时间与设备信息'] },
+        { title: '7. 合规与安全', paragraphs: ['涉及个人信息与交易数据的采集、传输、存储须符合银行信息安全规范。', '对外展示文案需经合规审核；涉及协议文本须使用最新发布版本。'] },
+        { title: '8. 验收标准', items: ['主流程端到端通过率不低于 98%', '关键节点留痕字段完整率 100%', '与关联 PRD 范围一致且无遗漏业务规则', '业务方完成 UAT 并签署验收结论'] },
+        { title: '9. 附录', paragraphs: [`文档创建：${meta.createTime}，最近更新：${meta.updateTime}，发布状态：${meta.status}，完备度：${meta.completeness}。`, `责任部门：${meta.department}。本文档由资产库自动生成摘要，完整版以正式归档文件为准。`] }
+      ];
+    }
+
+    if (item.type === 'product-asset') {
+      return [
+        { title: '1. 文档说明', paragraphs: [`本文档为「${item.name}」的产品需求文档（PRD），编码 ${item.code}，定义产品功能、交互规则、数据规范及异常处理逻辑。`, `承接上游 BRD，归属${tags.activity}主题活动，负责人 ${item.owner}，版本 ${meta.version}。`] },
+        { title: '1.1 文档目的', paragraphs: ['为 UI 设计、前后端开发、测试用例编写提供统一依据。', '明确与关联业务功能、下游研发任务的接口与边界。'] },
+        { title: '1.2 术语定义', items: ['BRD：业务需求说明书', 'PRD：产品需求文档', 'FDD：功能设计文档', '留痕：可审计的操作记录'] },
+        { title: '2. 功能概述', paragraphs: [item.desc, '本 PRD 聚焦单一产品能力交付，不包含跨产品编排的完整客户旅程（由业务资产统一定义）。'] },
+        { title: '3. 用户故事', items: [`作为客户，我希望顺利完成「${item.name}」，以便继续后续银行业务操作`, '作为产品经理，我希望配置规则与文案模板，以便快速响应监管或业务变更', '作为客服，我希望查询操作记录，以便解答客户咨询'] },
+        { title: '4. 功能详述', paragraphs: ['功能按页面/模块拆分，每个模块需定义入口、主路径、异常路径与空态。'] },
+        { title: '4.1 主流程', paragraphs: ['进入功能 → 加载必要上下文（账户/协议/限额） → 用户确认 → 提交核心服务 → 展示结果。', '加载中展示骨架屏；超过 3 秒给出等待提示。'] },
+        { title: '4.2 页面与交互', items: ['必填项未满足时禁用提交按钮并提示缺失项', '协议/条款支持展开全文与勾选联动', '错误提示需包含错误码与建议操作', '成功页提供下一步引导（返回首页/继续办理）'] },
+        { title: '5. 数据规范', paragraphs: ['与数据标准团队对齐字段命名、类型、长度与枚举值。关键交易须生成全局流水号。'] },
+        { title: '5.1 核心字段', items: ['requestId：请求唯一标识', 'userId / custId：客户标识', 'channelCode：渠道编码', 'deviceId：设备指纹', 'bizStatus：业务处理状态', 'timestamp：服务端处理时间'] },
+        { title: '6. 接口依赖', items: ['用户中心：身份与账户状态', '协议中心：模板与签署记录', '风控/限额服务：规则校验', '消息中心：结果通知（如适用）'] },
+        { title: '7. 异常处理', paragraphs: ['网络超时：支持重试 3 次，仍失败则提示稍后再试。', '业务拒绝：展示明确原因，不可使用系统异常等模糊文案。', '部分成功：需定义补偿或对账机制并告知客户。'] },
+        { title: '8. 非功能需求', items: ['接口 P99 响应 < 800ms（不含第三方）', '关键操作日志可追溯 ≥ 180 天', '支持灰度发布与快速回滚'] },
+        { title: '9. 测试要点', items: ['主流程 happy path 与边界值', '弱网/超时/重复提交', '多端适配（iOS/Android/鸿蒙）', '与 BRD 业务规则一致性'] },
+        { title: '10. 版本记录', paragraphs: [`v${meta.version.replace(/^v/, '')}（${meta.updateTime}）：当前发布版本。`, `维护人：${item.owner}，部门：${meta.department}。`] }
+      ];
+    }
+
     return [
-      { category: '业务标签', name: item?.tag || '通用', tone: 'blue' },
-      { category: '技术标签', name: item?.framework || '未标注', tone: 'green' }
+      { title: '1. 文档说明', paragraphs: [`本文档为「${item.name}」的功能文档（FDD），编码 ${item.code}，描述功能定义、处理逻辑、输入输出及上下游依赖。`, `功能挂载于${tags.domain} / ${tags.activity}，由 ${item.owner} 维护。`] },
+      { title: '1.1 功能定位', paragraphs: [item.desc, '功能文档面向研发与测试，作为单点能力实现与联调验收的依据。'] },
+      { title: '2. 功能入口', items: ['手机银行 APP 对应业务办理页', '远程银行坐席辅助入口（如适用）', '内部运营查询工具（只读）'] },
+      { title: '3. 处理流程', paragraphs: ['接收请求后完成参数校验 → 调用领域服务 → 聚合结果 → 返回标准响应码。', '异步步骤需返回受理中状态并支持结果回查。'] },
+      { title: '4. 输入输出', paragraphs: ['输入输出遵循接口规范，字段说明如下。'] },
+      { title: '4.1 输入参数', items: ['custId：客户号（必填）', 'acctNo：账号（条件必填）', 'bizScene：业务场景码（必填）', 'extInfo：扩展 JSON（可选）'] },
+      { title: '4.2 输出参数', items: ['resultCode：结果码，0000 为成功', 'resultMsg：结果描述', 'bizData：业务数据体', 'traceId：链路追踪 ID'] },
+      { title: '5. 业务规则', items: ['账户状态异常则拒绝办理', '触发风控拦截时返回专用错误码', '幂等键重复提交返回原结果', '关键状态变更写操作日志'] },
+      { title: '6. 依赖服务', items: ['核心账务服务', '用户认证服务', '限额与风控服务', '日志与监控平台'] },
+      { title: '7. 异常与降级', paragraphs: ['依赖服务不可用时，按预设降级策略返回友好提示或排队受理。', '严禁静默失败；所有异常须上报监控并关联 traceId。'] },
+      { title: '8. 性能与容量', items: ['峰值 TPS ≥ 500（单实例）', '超时阈值 3000ms', '支持水平扩展无状态部署'] },
+      { title: '9. 验收标准', items: ['功能测试用例通过率 100%', '与 PRD/BRD 规则一致', '日志与监控埋点完整', '安全扫描无高危漏洞'] },
+      { title: '10. 修订记录', paragraphs: [`最近更新：${meta.updateTime}，版本 ${meta.version}，状态 ${meta.status}。`, `文档责任人：${item.owner}（${meta.department}）。`] }
     ];
+  }
+
+  function assetDocumentSections(item) {
+    if (seedAssetDocumentSections[item.id]) return seedAssetDocumentSections[item.id];
+    return buildDefaultAssetDocumentSections(item);
+  }
+
+  function renderAssetDocSection(section, index) {
+    const bodyHtml = section.paragraphs
+      ? section.paragraphs.map((paragraph) => `<p>${esc(paragraph)}</p>`).join('')
+      : section.body
+        ? `<p>${esc(section.body)}</p>`
+        : '';
+    const listHtml = section.items?.length
+      ? `<ul class="asset-doc-list">${section.items.map((entry) => `<li>${esc(entry)}</li>`).join('')}</ul>`
+      : '';
+    return `<section class="asset-doc-section">
+      <h2 class="${index === 0 ? 'selected' : ''}">${esc(section.title)}</h2>
+      ${bodyHtml}
+      ${listHtml}
+    </section>`;
+  }
+
+  function renderAssetTagChain(item, compact = false) {
+    const tags = assetTagHierarchy(item);
+    return `<div class="asset-tag-chain${compact ? ' compact' : ''}" aria-label="标签维度">
+      <div class="asset-tag-chain-item"><em>价值链</em><span>${esc(tags.valueChain)}</span></div>
+      <i class="asset-tag-chain-arrow" aria-hidden="true"></i>
+      <div class="asset-tag-chain-item"><em>领域</em><span>${esc(tags.domain)}</span></div>
+      <i class="asset-tag-chain-arrow" aria-hidden="true"></i>
+      <div class="asset-tag-chain-item"><em>主题活动</em><span>${esc(tags.activity)}</span></div>
+    </div>`;
   }
 
   function assetTypeLabel(type) {
@@ -753,68 +939,96 @@
     }, { passive: false });
   }
 
-  function renderAssetDetailInfo(item) {
+  function renderAssetDetailDocument(item) {
+    const doc = assetDocumentMeta(item.type);
+    const sections = assetDocumentSections(item);
     const meta = assetDetailMeta(item);
-    const stat = assetStats.find((s) => s.id === item.type) || assetStats[0];
-    const rows = [
-      ['资产名称', item.name],
-      ['资产编码', item.code],
-      ['资产类型', assetTypeLabel(item.type)],
-      ['负责人', item.owner],
-      ['所属部门', meta.department],
-      ['业务领域', meta.domain],
-      ['价值流', meta.valueStream],
-      ['框架类型', item.framework],
-      ['版本号', meta.version],
-      ['发布状态', meta.status],
-      ['规范完备度', meta.completeness],
-      ['创建时间', meta.createTime],
-      ['最近更新', meta.updateTime]
-    ];
-    return `<div class="asset-detail-info-panel">
-      <header class="asset-detail-info-head">
-        <span class="asset-result-icon">${renderAssetStatIcon(stat, true)}</span>
-        <div>
-          <h2>${esc(item.name)}</h2>
-          <code>${esc(item.code)}</code>
+    return `<div class="asset-detail-doc-panel">
+      <div class="asset-doc-type-badge"><strong>${esc(doc.abbr)}</strong><span>${esc(doc.label)}</span><em>${esc(meta.version)} · ${esc(meta.updateTime)} 更新 · 共 ${sections.length} 节</em></div>
+      <div class="asset-doc-body">
+        <nav class="asset-doc-outline">
+          <a class="active">${esc(item.name.length > 14 ? `${item.name.slice(0, 14)}…` : item.name)}</a>
+          ${sections.map((section) => `<a>${esc(section.title)}</a>`).join('')}
+        </nav>
+        <div class="asset-doc-scroll">
+          <article class="doc-article asset-doc-article">
+            <h1>${esc(item.name)}</h1>
+            <p class="asset-doc-subtitle">${esc(doc.label)} · ${esc(item.code)} · ${esc(item.owner)} · ${esc(meta.department)}</p>
+            ${sections.map(renderAssetDocSection).join('')}
+          </article>
         </div>
-      </header>
-      <p class="asset-detail-desc">${esc(item.desc)}</p>
-      <div class="asset-detail-info-grid">
-        ${rows.map(([label, value]) => `
-          <div class="asset-detail-info-item">
-            <span>${esc(label)}</span>
-            <strong>${esc(value)}</strong>
-          </div>`).join('')}
       </div>
     </div>`;
   }
 
+  function relatedAssetsInActivity(item) {
+    const activity = assetTagHierarchy(item).activity;
+    return seedAssetResults.filter((asset) => assetTagHierarchy(asset).activity === activity);
+  }
+
   function renderAssetDetailTags(item) {
-    const tags = assetDetailTags(item);
-    const grouped = tags.reduce((acc, tag) => {
-      if (!acc[tag.category]) acc[tag.category] = [];
-      acc[tag.category].push(tag);
-      return acc;
-    }, {});
+    const tags = assetTagHierarchy(item);
+    const meta = assetDetailMeta(item);
+    const related = relatedAssetsInActivity(item);
+    const levels = [
+      { key: 'valueChain', label: '价值链标签', tone: 'blue', parent: null },
+      { key: 'domain', label: '领域标签', tone: 'indigo', parent: tags.valueChain },
+      { key: 'activity', label: '主题活动标签', tone: 'purple', parent: tags.domain }
+    ];
+
     return `<div class="asset-detail-tags-panel">
-      <header class="asset-detail-tags-head">
-        <strong>资产标签</strong>
-        <span>共 ${tags.length} 个标签</span>
-      </header>
-      ${Object.entries(grouped).map(([category, list]) => `
-        <section class="asset-detail-tag-group">
-          <h3>${esc(category)}</h3>
-          <div class="asset-detail-tag-list">
-            ${list.map((tag) => `<span class="asset-detail-tag tone-${tag.tone}">${esc(tag.name)}</span>`).join('')}
+      <div class="asset-tags-hero">
+        <div class="asset-tags-hero-text">
+          <strong>标签信息</strong>
+          <p>${esc(item.name)} · ${esc(item.code)} · ${esc(assetTypeLabel(item.type))}</p>
+        </div>
+        ${renderAssetTagChain(item)}
+      </div>
+
+      <div class="asset-tags-main">
+        <section class="asset-tags-tree-card">
+          <h4>标签层级</h4>
+          <div class="asset-tag-timeline">
+            ${levels.map((level, index) => `
+              <article class="asset-tag-timeline-item tone-${level.tone}${index === levels.length - 1 ? ' last' : ''}">
+                <div class="asset-tag-timeline-axis">
+                  <span class="asset-tag-level-badge tone-${level.tone}">L${index + 1}</span>
+                  ${index < levels.length - 1 ? '<i class="asset-tag-timeline-line" aria-hidden="true"></i>' : ''}
+                </div>
+                <div class="asset-tag-timeline-body">
+                  <div class="asset-tag-timeline-head">
+                    <strong>${esc(level.label)}</strong>
+                    ${level.parent ? `<em>上级：${esc(level.parent)}</em>` : '<em>根级标签</em>'}
+                  </div>
+                  <span class="asset-detail-tag tone-${level.tone} asset-tag-timeline-value">${esc(tags[level.key])}</span>
+                </div>
+              </article>`).join('')}
           </div>
-        </section>`).join('')}
-      <table class="asset-detail-tag-table">
-        <thead><tr><th>标签分类</th><th>标签名称</th><th>来源</th></tr></thead>
-        <tbody>
-          ${tags.map((tag) => `<tr><td>${esc(tag.category)}</td><td><span class="asset-detail-tag tone-${tag.tone}">${esc(tag.name)}</span></td><td>资产库自动标注</td></tr>`).join('')}
-        </tbody>
-      </table>
+        </section>
+
+        <aside class="asset-tags-aside">
+          <section class="asset-tags-aside-card">
+            <h4>标注概览</h4>
+            <dl class="asset-tags-kv">
+              <div><dt>负责人</dt><dd>${esc(item.owner)}</dd></div>
+              <div><dt>责任部门</dt><dd>${esc(meta.department)}</dd></div>
+              <div><dt>标注来源</dt><dd>资产库自动标注</dd></div>
+              <div><dt>最近更新</dt><dd>${esc(meta.updateTime)}</dd></div>
+            </dl>
+          </section>
+          <section class="asset-tags-aside-card">
+            <h4>同主题资产</h4>
+            <p class="asset-tags-aside-count">「${esc(tags.activity)}」下共 <b>${related.length}</b> 项</p>
+            <ul class="asset-tags-related-list">
+              ${related.slice(0, 5).map((asset) => `
+                <li>
+                  <span>${esc(asset.name)}</span>
+                  <em>${esc(assetTypeLabel(asset.type))}</em>
+                </li>`).join('')}
+            </ul>
+          </section>
+        </aside>
+      </div>
     </div>`;
   }
 
@@ -854,7 +1068,7 @@
     let tabContent = '';
     if (state.assetDetailTab === 'tags') tabContent = renderAssetDetailTags(item);
     else if (state.assetDetailTab === 'lineage') tabContent = renderAssetDetailLineage();
-    else tabContent = renderAssetDetailInfo(item);
+    else tabContent = renderAssetDetailDocument(item);
 
     return `<section class="asset-detail-view">
       <header class="asset-detail-head">
@@ -875,25 +1089,33 @@
             <button class="asset-detail-tab ${state.assetDetailTab === tab.id ? 'active' : ''}" data-action="set-asset-detail-tab" data-tab="${tab.id}">${esc(tab.label)}</button>`).join('')}
         </div>
       </header>
-      <div class="asset-detail-body ${state.assetDetailTab === 'lineage' ? 'lineage-mode' : ''}">${tabContent}</div>
+      <div class="asset-detail-body ${state.assetDetailTab === 'lineage' ? 'lineage-mode' : ''} ${state.assetDetailTab === 'detail' ? 'doc-mode' : ''} ${state.assetDetailTab === 'tags' ? 'tags-mode' : ''}">${tabContent}</div>
     </section>`;
+  }
+
+  function assetResultsBaseFilter() {
+    return seedAssetResults.filter((item) => {
+      if (item.type !== state.assetActiveType) return false;
+      if (state.assetScope === 'mine' && !item.mine && !assetMineOwners().includes(item.owner)) return false;
+      return true;
+    });
   }
 
   function filteredAssetResults() {
     const keyword = state.assetKeyword.trim().toLowerCase();
-    return seedAssetResults.filter((item) => {
-      if (item.type !== state.assetActiveType) return false;
-      if (state.assetScope === 'mine' && !item.mine && !assetMineOwners().includes(item.owner)) return false;
-      if (state.assetFramework !== '全部框架类型' && item.framework !== state.assetFramework) return false;
+    const base = assetResultsBaseFilter();
+    if (!keyword) return base;
+    const matched = base.filter((item) => {
       const haystack = `${item.name}${item.code}${item.desc}${item.tag}${item.owner}`.toLowerCase();
-      return !keyword || haystack.includes(keyword);
+      return haystack.includes(keyword);
     });
+    return matched.length ? matched : base;
   }
 
   function assetResultTotal() {
     const stat = assetStats.find((item) => item.id === state.assetActiveType);
     const filtered = filteredAssetResults();
-    if (!state.assetKeyword.trim() && state.assetScope === 'all' && state.assetFramework === '全部框架类型') {
+    if (!state.assetKeyword.trim() && state.assetScope === 'all') {
       return stat?.count ?? filtered.length;
     }
     return filtered.length;
@@ -941,7 +1163,7 @@
         </div>
       </div>
       <p class="asset-result-desc">${esc(item.desc)}</p>
-      <span class="asset-result-tag">${esc(item.tag)}</span>
+      ${renderAssetTagChain(item, true)}
       <footer class="asset-result-footer">
         <span class="asset-result-owner">${esc(item.owner)}</span>
         <div class="asset-result-actions">
@@ -993,15 +1215,9 @@
           <button class="${state.assetScope === 'all' ? 'active' : ''}" data-action="set-asset-scope" data-scope="all">全平台</button>
           <button class="${state.assetScope === 'mine' ? 'active' : ''}" data-action="set-asset-scope" data-scope="mine">我负责的</button>
         </div>
-        <div class="asset-framework-filter ${state.assetFrameworkOpen ? 'open' : ''}">
-          <button class="asset-framework-btn" data-action="toggle-asset-framework">${esc(state.assetFramework)}${icon('caret', 12)}</button>
-          ${state.assetFrameworkOpen ? `<div class="asset-framework-menu">
-            ${assetFrameworkOptions.map((option) => `<button class="${state.assetFramework === option ? 'active' : ''}" data-action="set-asset-framework" data-framework="${esc(option)}">${esc(option)}</button>`).join('')}
-          </div>` : ''}
-        </div>
       </div>
       <div class="asset-result-grid">
-        ${cards.length ? cards.map(renderAssetResultCard).join('') : '<div class="asset-result-empty">暂无匹配资产，请调整关键词或筛选条件</div>'}
+        ${cards.length ? cards.map(renderAssetResultCard).join('') : '<div class="asset-result-empty">暂无匹配资产，请调整关键词</div>'}
       </div>
       ${renderAssetPagination(total)}
     </section>`;
@@ -1010,7 +1226,6 @@
   function runAssetSearch() {
     state.assetShowResults = true;
     state.assetPage = 1;
-    state.assetFrameworkOpen = false;
     render();
   }
 
@@ -1230,12 +1445,11 @@
     const msgs = messages();
     return `<section class="chat-panel">
       <header class="chat-title">
+        <button class="chat-title-toggle tool-toggle" title="${state.railCollapsed ? '展开菜单' : '收起菜单'}" data-action="toggle-rail">${icon(state.railCollapsed ? 'panelLeft' : 'panelLeftClose', 18)}</button>
         <h2>${esc(chat?.title || '')}</h2>
         <div class="tools">
-          <button class="tool-toggle" title="执行进度" data-action="open-progress">${icon('workflow', 18)}</button>
-          <button class="tool-toggle ${state.tab === 'log' ? 'active' : ''}" title="${state.tab === 'log' ? '返回会话' : '流转日志'}" data-action="toggle-log">
-            ${icon(state.tab === 'log' ? 'chat' : 'log', 18)}
-          </button>
+          <button class="tool-toggle ${state.showProgress ? 'active' : ''}" title="执行进度" data-action="open-progress">${icon('workflow', 18)}</button>
+          <button class="tool-toggle ${state.tab === 'log' ? 'active' : ''}" title="${state.tab === 'log' ? '返回会话' : '流转日志'}" data-action="toggle-log">${icon(state.tab === 'log' ? 'chat' : 'log', 18)}</button>
         </div>
       </header>
       <div class="messages">
@@ -1286,8 +1500,12 @@
               <div>${avatar('product', 24)}陈产品 <em>小微企业金融部门</em><strong>核心链路</strong></div>
             </div>
             <div class="dispatch-item">
-              <b><span>需求2</span>账户选择与结果凭证</b>
-              <div>${avatar('product', 24)}王产品 <em>零售金融部门</em><strong>客户体验</strong></div>
+              <b><span>需求2</span>账户选择与金额规则</b>
+              <div>${avatar('product', 24, 1)}王产品 <em>零售金融部门</em><strong>客户体验</strong></div>
+            </div>
+            <div class="dispatch-item">
+              <b><span>需求3</span>开户结果与凭证</b>
+              <div>${avatar('product', 24, 2)}房产品 <em>渠道产品部门</em><strong>用户增长</strong></div>
             </div>
             <footer><button class="primary" data-action="agree-dispatch">同意派发</button><small>可输入 @产品姓名 调整</small></footer>
           </article>
@@ -1330,10 +1548,9 @@
           <button class="${state.activeDocMode === 'product' ? 'active' : ''}" data-action="set-doc-mode" data-mode="product">产品需求文档</button>
         </div>` : ''}
         <nav class="doc-tools">
-          <button class="tool-toggle doc-tool" title="预览">${icon('eye', 18)}</button>
+          <button class="tool-toggle doc-tool" title="全屏">${icon('fullscreen', 18)}</button>
           <button class="tool-toggle doc-tool" title="复制">${icon('copy', 18)}</button>
           <button class="tool-toggle doc-tool" title="下载">${icon('download', 18)}</button>
-          <button class="tool-toggle doc-tool" title="分享">${icon('share', 18)}</button>
           <button class="tool-toggle doc-tool" title="关闭">${icon('close', 18)}</button>
         </nav>
       </header>
@@ -1369,13 +1586,12 @@
     const height = progressCanvasHeight();
     const children = progressBusinessChildren();
     const columns = progressColumns();
-    const lines = progressFlowLines();
     return `<aside class="progress-drawer">
       <header><h2>流程进度看板</h2><button class="drawer-close" data-action="close-progress" title="关闭">${icon('close', 18)}</button></header>
       <div class="progress-stage-bar">${PROGRESS_STAGES.map((stage) => `<span>${esc(stage)}</span>`).join('')}</div>
       <div class="progress-canvas progress-canvas-v3" style="min-height:${height}px">
         ${PROGRESS_STAGES.map((stage) => `<div class="progress-lane-shade"></div>`).join('')}
-        ${showProgressProductCard() ? `<svg class="flow-lines flow-lines-v3" viewBox="0 0 1000 ${height}" preserveAspectRatio="none">${lines.map((d) => `<path d="${d}"/>`).join('')}</svg>` : ''}
+        ${showProgressProductCard() ? '<svg class="flow-lines flow-lines-v3" aria-hidden="true"></svg>' : ''}
         <div class="progress-col col-1">
           <article class="progress-demand-card">
             <h3>${esc(req.title)}</h3>
@@ -1383,7 +1599,7 @@
               ${avatar('business', 24)}<b>${esc(req.creator)}</b><em>创建于 ${esc(req.createTime.slice(0, 16))}</em>
             </div>
             ${children.length ? `<div class="progress-demand-children">${children.map((child) => `
-              <div class="progress-child">
+              <div class="progress-child" data-flow-id="${esc(child.id)}">
                 <span class="biz-tag ${child.tagClass}">${esc(child.tag)}</span>
                 <em>${esc(child.partLabel)}</em>
                 <strong>${esc(child.title)}</strong>
@@ -1440,8 +1656,8 @@
     const scrollMessages = root.querySelector('.messages');
     const msgScrollTop = scrollMessages ? scrollMessages.scrollTop : 0;
 
-    root.innerHTML = `<div class="app-shell ${state.page === 'workspace' ? 'workspace-mode' : ''}">
-      <aside class="rail ${state.page === 'workspace' ? 'rail-expanded' : ''}">
+    root.innerHTML = `<div class="app-shell ${state.page === 'workspace' ? 'workspace-mode' : ''} ${state.page === 'workspace' && state.railCollapsed ? 'rail-collapsed' : ''}">
+      <aside class="rail ${state.page === 'workspace' && !state.railCollapsed ? 'rail-expanded' : ''}">
         <img class="logo-img" src="${LOGO_URL}" alt="业务需求平台"/>
         <nav class="rail-nav">
           <button class="rail-icon ${state.page === 'home' ? 'active' : ''}" data-action="nav" data-page="home" title="首页">${icon('home')}</button>
@@ -1450,7 +1666,7 @@
           <button class="rail-icon ${['asset-matrix', 'asset-domain-detail'].includes(state.page) ? 'active' : ''}" data-action="nav" data-page="asset-matrix" title="资产矩阵">${icon('assetMatrix')}</button>
           <button class="rail-icon ${state.page === 'workspace' ? 'active' : ''}" data-action="open-conversation" data-id="${esc(state.activeConversationId)}" title="会话">${icon('chat')}</button>
         </nav>
-        ${renderRailSessions()}
+        ${state.page === 'workspace' && !state.railCollapsed ? renderRailSessions() : ''}
         <div class="rail-grow"></div>
         <div class="user-menu">
           <button class="avatar user-avatar" data-action="toggle-role-menu" title="当前：${esc(currentRoleLabel())}">${esc(currentRoleAvatar())}</button>
@@ -1471,6 +1687,10 @@
       lineageRenderTree();
     }
     fitViewport();
+    if (state.showProgress) {
+      bindProgressCanvasEvents(root);
+      requestAnimationFrame(() => updateProgressFlowLines());
+    }
   }
 
   function bindPoolCardHover(root) {
@@ -1577,8 +1797,8 @@
     state.dispatchCompleted = true;
     req.status = '待承接';
     req.parts.forEach((part) => { part.status = '待承接'; part.lane = '需求待承接'; });
-    pushMessage({ id: Date.now(), from: 'ai', html: '已派发 2 条承接任务。' });
-    state.logs.push({ title: 'AI 推荐派发', time: '刚刚', text: '业务经理同意 AI 推荐派发方案，系统生成陈产品、王产品的承接任务。', artifact: '承接卡片' });
+    pushMessage({ id: Date.now(), from: 'ai', html: '已派发 3 条承接任务。' });
+    state.logs.push({ title: 'AI 推荐派发', time: '刚刚', text: '业务经理同意 AI 推荐派发方案，系统生成李一飞、王产品、房产品的承接任务。', artifact: '承接卡片' });
     render();
   }
 
@@ -1696,6 +1916,10 @@
         state.showProgress = true;
         render();
         break;
+      case 'toggle-rail':
+        state.railCollapsed = !state.railCollapsed;
+        render();
+        break;
       case 'toggle-log':
         state.showProgress = false;
         state.tab = state.tab === 'log' ? 'chat' : 'log';
@@ -1761,7 +1985,6 @@
         break;
       case 'back-asset-home':
         state.assetShowResults = false;
-        state.assetFrameworkOpen = false;
         render();
         break;
       case 'open-asset-results':
@@ -1771,21 +1994,10 @@
       case 'set-asset-type':
         state.assetActiveType = el.dataset.type;
         state.assetPage = 1;
-        state.assetFrameworkOpen = false;
         render();
         break;
       case 'set-asset-scope':
         state.assetScope = el.dataset.scope;
-        state.assetPage = 1;
-        render();
-        break;
-      case 'toggle-asset-framework':
-        state.assetFrameworkOpen = !state.assetFrameworkOpen;
-        render();
-        break;
-      case 'set-asset-framework':
-        state.assetFramework = el.dataset.framework;
-        state.assetFrameworkOpen = false;
         state.assetPage = 1;
         render();
         break;
@@ -1961,6 +2173,9 @@
     app.style.transformOrigin = 'top left';
     app.style.transform = `translate(${offsetX}px, ${offsetY}px) scale(${scale})`;
     document.documentElement.style.setProperty('--app-scale', String(scale));
+    if (state.showProgress) {
+      requestAnimationFrame(() => updateProgressFlowLines());
+    }
   }
 
   window.addEventListener('resize', fitViewport);

@@ -10,7 +10,8 @@ const seedRequirements = [
     status: '待承接',
     parts: [
       { id: 'PRD-A1', title: '开户协议落库', owner: '李一飞', time: '10:18', lane: '需求待承接', status: '待承接' },
-      { id: 'PRD-A2', title: '账户选择与金额规则', owner: '王产品', time: '10:20', lane: '需求待承接', status: '待承接' }
+      { id: 'PRD-A2', title: '账户选择与金额规则', owner: '王产品', time: '10:35', lane: '产品拆解', status: '拆解中' },
+      { id: 'PRD-A3', title: '开户结果与凭证', owner: '房产品', time: '11:02', lane: '业务审核中', status: '待审核' }
     ]
   },
   {
@@ -24,7 +25,8 @@ const seedRequirements = [
     status: '待承接',
     parts: [
       { id: 'PRD-B1', title: '亲情账户充值入口', owner: '王产品', time: '11:03', lane: '需求待承接', status: '待承接' },
-      { id: 'PRD-B2', title: '交易结果通知', owner: '李产品', time: '11:05', lane: '需求待承接', status: '待承接' }
+      { id: 'PRD-B2', title: '交易结果通知', owner: '陈产品', time: '11:20', lane: '产品拆解', status: '拆解中' },
+      { id: 'PRD-B3', title: '充值限额校验', owner: '吴产品', time: '11:45', lane: '已完成', status: '已完成' }
     ]
   },
   {
@@ -37,7 +39,9 @@ const seedRequirements = [
     flowTime: '2026-06-17 14:20',
     status: '已完成',
     parts: [
-      { id: 'PRD-C1', title: '活体鉴权接入', owner: '赵产品', time: '14:20', lane: '已完成', status: '已完成' }
+      { id: 'PRD-C1', title: '活体鉴权接入', owner: '赵产品', time: '14:20', lane: '需求待承接', status: '已完成' },
+      { id: 'PRD-C2', title: '人脸采集引导', owner: '周开发', time: '15:10', lane: '产品拆解', status: '已完成' },
+      { id: 'PRD-C3', title: '鉴权结果回调', owner: '李一飞', time: '16:30', lane: '已完成', status: '已完成' }
     ]
   },
   {
@@ -51,8 +55,9 @@ const seedRequirements = [
     status: '产品拒绝',
     rejectReason: '业务需求不合理，且信息缺失',
     parts: [
-      { id: 'PRD-D1', title: '限额规则配置', owner: '产品3', time: '17:20', lane: '业务需求', status: '退回业务补充' },
-      { id: 'PRD-D2', title: '灰度名单导入', owner: '产品3', time: '17:20', lane: '业务需求', status: '退回业务补充' }
+      { id: 'PRD-D1', title: '限额规则配置', owner: '产品3', time: '17:20', lane: '需求待承接', status: '退回业务补充' },
+      { id: 'PRD-D2', title: '灰度名单导入', owner: '产品3', time: '17:22', lane: '产品拆解', status: '退回业务补充' },
+      { id: 'PRD-D3', title: '规则生效通知', owner: '产品3', time: '17:25', lane: '业务审核中', status: '退回业务补充' }
     ]
   }
 ];
@@ -67,9 +72,9 @@ const seedPoolBoard = {
       createTime: '2026-10-10 12:00',
       status: null,
       children: [
-        { tag: '客户体验', tagClass: 'blue', title: '亲情账户储蓄罐充值需求', label: '产品需求1' },
-        { tag: '用户增长', tagClass: 'orange', title: '开户协议落库', label: '产品需求2' },
-        { tag: '核心链路', tagClass: 'red', title: '人脸活体鉴权检测接入', label: '产品需求3' }
+        { tag: '核心链路', tagClass: 'red', title: '开户协议落库', label: '产品需求1' },
+        { tag: '客户体验', tagClass: 'blue', title: '账户选择与金额规则', label: '产品需求2' },
+        { tag: '用户增长', tagClass: 'orange', title: '开户结果与凭证', label: '产品需求3' }
       ]
     },
     {
@@ -80,8 +85,9 @@ const seedPoolBoard = {
       createTime: '2026-10-10 12:00',
       status: null,
       children: [
-        { tag: '客户体验', tagClass: 'blue', title: '亲情账户储蓄罐充值需求', label: '产品需求1' },
-        { tag: '用户增长', tagClass: 'orange', title: '开户协议落库', label: '产品需求2' }
+        { tag: '客户体验', tagClass: 'blue', title: '亲情账户充值入口', label: '产品需求1' },
+        { tag: '用户增长', tagClass: 'orange', title: '交易结果通知', label: '产品需求2' },
+        { tag: '核心链路', tagClass: 'red', title: '充值限额校验', label: '产品需求3' }
       ]
     },
     {
@@ -92,8 +98,9 @@ const seedPoolBoard = {
       createTime: '2026-10-10 12:00',
       status: '已退回',
       children: [
-        { tag: '客户体验', tagClass: 'blue', title: '亲情账户储蓄罐充值需求', label: '产品需求1' },
-        { tag: '用户增长', tagClass: 'orange', title: '开户协议落库', label: '产品需求2' }
+        { tag: '核心链路', tagClass: 'red', title: '限额规则配置', label: '产品需求1' },
+        { tag: '客户体验', tagClass: 'blue', title: '灰度名单导入', label: '产品需求2' },
+        { tag: '用户增长', tagClass: 'orange', title: '规则生效通知', label: '产品需求3' }
       ]
     },
     {
@@ -104,8 +111,9 @@ const seedPoolBoard = {
       createTime: '2026-10-09 16:30',
       status: null,
       children: [
-        { tag: '核心链路', tagClass: 'red', title: '限额规则配置', label: '产品需求1' },
-        { tag: '客户体验', tagClass: 'blue', title: '灰度名单导入', label: '产品需求2' }
+        { tag: '核心链路', tagClass: 'red', title: '活体鉴权接入', label: '产品需求1' },
+        { tag: '客户体验', tagClass: 'blue', title: '人脸采集引导', label: '产品需求2' },
+        { tag: '用户增长', tagClass: 'orange', title: '鉴权结果回调', label: '产品需求3' }
       ]
     },
     {
@@ -122,12 +130,11 @@ const seedPoolBoard = {
   ],
   tasks: [
     { id: 'B1001-001', lane: '需求待承接', title: '开户协议落库', domain: '客户体验', domainTone: 'blue', relation: '个人养老金开户流程改造', requirementId: 'BR-20260617-001', person: null, timeLabel: null },
-    { id: 'B1001-002', lane: '需求待承接', title: '亲情账户储蓄罐充值需求', domain: '用户增长', domainTone: 'orange', relation: '个人养老金开户流程改造', requirementId: 'BR-20260617-001', person: null, timeLabel: null },
-    { id: 'B1001-003', lane: '产品拆解', title: '人脸活体鉴权检测接入', domain: '客户体验', domainTone: 'blue', relation: '个人养老金开户流程改造', requirementId: 'BR-20260617-001', person: '王大路', timeLabel: '承接于 2026-10-10 12:00' },
-    { id: 'B1001-001', lane: '业务审核中', title: '人脸活体鉴权检测接入', domain: '客户体验', domainTone: 'blue', relation: '个人养老金开户流程改造', requirementId: 'BR-20260617-001', person: '王大路', timeLabel: '提交于 2026-10-10 12:00' },
-    { id: 'B1001-004', lane: '业务审核中', title: '开户协议落库', domain: '核心链路', domainTone: 'red', relation: '个人养老金开户流程改造', requirementId: 'BR-20260617-001', person: '王大路', timeLabel: '提交于 2026-10-10 12:00' },
-    { id: 'B1001-005', lane: '业务审核中', title: '账户选择与金额规则', domain: '客户体验', domainTone: 'blue', relation: '个人养老金开户流程改造', requirementId: 'BR-20260617-001', person: '王大路', timeLabel: '提交于 2026-10-10 12:00' },
-    { id: 'B1001-002', lane: '已完成', title: '亲情账户储蓄罐充值需求', domain: '用户增长', domainTone: 'orange', relation: '个人养老金开户流程改造', requirementId: 'BR-20260617-001', person: null, timeLabel: null }
+    { id: 'B1001-002', lane: '产品拆解', title: '账户选择与金额规则', domain: '客户体验', domainTone: 'blue', relation: '个人养老金开户流程改造', requirementId: 'BR-20260617-001', person: '王产品', timeLabel: '承接于 2026-06-17 10:35' },
+    { id: 'B1001-003', lane: '业务审核中', title: '开户结果与凭证', domain: '用户增长', domainTone: 'orange', relation: '个人养老金开户流程改造', requirementId: 'BR-20260617-001', person: '房产品', timeLabel: '提交于 2026-06-17 11:02' },
+    { id: 'B1002-001', lane: '需求待承接', title: '亲情账户充值入口', domain: '客户体验', domainTone: 'blue', relation: '亲情账户储蓄罐充值需求说明书', requirementId: 'BR-20260617-002', person: null, timeLabel: null },
+    { id: 'B1002-002', lane: '产品拆解', title: '交易结果通知', domain: '用户增长', domainTone: 'orange', relation: '亲情账户储蓄罐充值需求说明书', requirementId: 'BR-20260617-002', person: '陈产品', timeLabel: '承接于 2026-06-17 11:20' },
+    { id: 'B1002-003', lane: '已完成', title: '充值限额校验', domain: '核心链路', domainTone: 'red', relation: '亲情账户储蓄罐充值需求说明书', requirementId: 'BR-20260617-002', person: '吴产品', timeLabel: '完成于 2026-06-17 11:45' }
   ]
 };
 
@@ -153,8 +160,6 @@ const assetStats = [
   { id: 'product-asset', label: '产品资产', count: 964, tone: 'green', glyph: 'prod' },
   { id: 'business-function', label: '业务功能', count: 438, tone: 'purple', glyph: 'func' }
 ];
-
-const assetFrameworkOptions = ['全部框架类型', 'Spring Boot', 'Dubbo', 'MyBatis', 'Vue', 'React'];
 
 const seedAssetResults = [
   { id: 'a1', type: 'business-asset', name: '个人养老金开户流程', code: 'BA-PNSA', desc: '覆盖协议确认、账户选择与开户结果凭证的完整业务资产。', tag: '业务资产', owner: '王大陆', framework: 'Spring Boot', mine: true },
@@ -246,33 +251,35 @@ const initialLogs = [
   { title: '派发承接', time: '2026-06-17 10:18', text: '业务经理通过 @李一飞 派发开户协议落库任务。', artifact: '承接卡片' }
 ];
 
+const seedAssetTagHierarchy = {
+  a1: { valueChain: '个人金融价值链', domain: '核心账务领域', activity: '存款与账户管理' },
+  a2: { valueChain: '个人金融价值链', domain: '核心账务领域', activity: '充值与转账' },
+  a3: { valueChain: '个人金融价值链', domain: '电子渠道领域', activity: '手机银行运营' },
+  a4: { valueChain: '对公与同业价值链', domain: '支付结算领域', activity: '对公转账服务' },
+  a5: { valueChain: '全面风险与合规价值链', domain: '操作风险领域', activity: '限额与灰度管控' },
+  a6: { valueChain: '客户与市场营销价值链', domain: '营销管理领域', activity: '发券与核销' },
+  a7: { valueChain: '个人金融价值链', domain: '电子渠道领域', activity: '智能客服接入' },
+  a8: { valueChain: '全面风险与合规价值链', domain: '反欺诈领域', activity: '活体鉴权接入' },
+  a9: { valueChain: '个人金融价值链', domain: '核心账务领域', activity: '存款与账户管理' },
+  a10: { valueChain: '个人金融价值链', domain: '核心账务领域', activity: '存款与账户管理' },
+  a11: { valueChain: '个人金融价值链', domain: '核心账务领域', activity: '存款与账户管理' },
+  a12: { valueChain: '科技赋能价值链', domain: '应用开发平台领域', activity: '网关接入管理' },
+  a13: { valueChain: '科技赋能价值链', domain: '应用开发平台领域', activity: '前端配置发布' },
+  a14: { valueChain: '个人金融价值链', domain: '电子渠道领域', activity: '远程服务编排' },
+  a15: { valueChain: '个人金融价值链', domain: '电子渠道领域', activity: '手机银行运营' },
+  a16: { valueChain: '个人金融价值链', domain: '核心账务领域', activity: '存款与账户管理' },
+  a17: { valueChain: '个人金融价值链', domain: '电子渠道领域', activity: '手机银行运营' },
+  a18: { valueChain: '全面风险与合规价值链', domain: '操作风险领域', activity: '限额与灰度管控' },
+  a19: { valueChain: '个人金融价值链', domain: '核心账务领域', activity: '存款与账户管理' },
+  a20: { valueChain: '个人金融价值链', domain: '核心账务领域', activity: '充值与转账' }
+};
+
+const seedAssetDocumentSections = {};
+
 const seedAssetDetailMeta = {
   a1: { domain: '个人存款', valueStream: '开户与账户管理', version: 'v2.1.0', createTime: '2025-03-12', updateTime: '2026-05-08', status: '已发布', completeness: '已完备', department: '零售金融部门' },
   a2: { domain: '个人存款', valueStream: '充值与转账', version: 'v1.4.2', createTime: '2025-06-18', updateTime: '2026-04-22', status: '已发布', completeness: '已完备', department: '零售金融部门' },
   a9: { domain: '个人存款', valueStream: '开户与账户管理', version: 'v1.0.3', createTime: '2025-08-01', updateTime: '2026-03-15', status: '已发布', completeness: '已完备', department: '小微企业金融部门' }
-};
-
-const seedAssetTags = {
-  a1: [
-    { category: '业务标签', name: '个人金融', tone: 'blue' },
-    { category: '业务标签', name: '养老金', tone: 'blue' },
-    { category: '业务标签', name: '开户流程', tone: 'indigo' },
-    { category: '技术标签', name: 'Spring Boot', tone: 'green' },
-    { category: '技术标签', name: '微服务', tone: 'green' },
-    { category: '风险标签', name: '合规校验', tone: 'orange' },
-    { category: '数据标签', name: '协议落库', tone: 'purple' }
-  ],
-  a2: [
-    { category: '业务标签', name: '亲情账户', tone: 'blue' },
-    { category: '业务标签', name: '充值', tone: 'blue' },
-    { category: '技术标签', name: 'Dubbo', tone: 'green' },
-    { category: '风险标签', name: '限额校验', tone: 'orange' }
-  ],
-  a9: [
-    { category: '业务标签', name: '协议管理', tone: 'blue' },
-    { category: '产品标签', name: '核心链路', tone: 'red' },
-    { category: '技术标签', name: 'Spring Boot', tone: 'green' }
-  ]
 };
 
 const seedLineageRoot = {

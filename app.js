@@ -1470,6 +1470,7 @@
     if (state.page === 'asset-detail' && state.assetDetailTab === 'lineage') {
       lineageRenderTree();
     }
+    fitViewport();
   }
 
   function bindPoolCardHover(root) {
@@ -1940,14 +1941,23 @@
 
   function fitViewport() {
     const designW = 1920;
-    const designH = 1080;
+    const baseDesignH = 1080;
     const vw = document.documentElement.clientWidth || window.innerWidth;
     const vh = document.documentElement.clientHeight || window.innerHeight;
-    const scale = vw / designW;
+    const scaleW = vw / designW;
+    let designH = baseDesignH;
+    let scale = scaleW;
+    let offsetX = 0;
+    if (state.page === 'workspace') {
+      const bottomInset = 32;
+      designH = Math.min(baseDesignH, Math.floor((vh - bottomInset) / scaleW));
+    }
     const scaledH = designH * scale;
-    const offsetX = 0;
-    const offsetY = scaledH <= vh ? (vh - scaledH) / 2 : 0;
+    const offsetY = state.page === 'workspace'
+      ? 0
+      : (scaledH <= vh ? (vh - scaledH) / 2 : 0);
     const app = document.getElementById('app');
+    document.documentElement.style.setProperty('--design-height', String(designH));
     app.style.transformOrigin = 'top left';
     app.style.transform = `translate(${offsetX}px, ${offsetY}px) scale(${scale})`;
     document.documentElement.style.setProperty('--app-scale', String(scale));
